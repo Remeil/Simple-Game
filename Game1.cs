@@ -10,6 +10,10 @@ namespace SimpleGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Vector2 wallVector = new Vector2(0, 0);
+        Vector2 floorVector = new Vector2(32, 32);
+        Texture2D wallTexture;
+        Texture2D floorTexture;
 
         public Game1()
         {
@@ -40,6 +44,8 @@ namespace SimpleGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            wallTexture = this.Content.Load<Texture2D>("Wall.png");
+            floorTexture = this.Content.Load<Texture2D>("Floor.png");
         }
 
         /// <summary>
@@ -72,6 +78,10 @@ namespace SimpleGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(wallTexture, wallVector);
+            spriteBatch.Draw(floorTexture, floorVector);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
