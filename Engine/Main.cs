@@ -1,10 +1,10 @@
 #region Using Statements
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
+
 #endregion
 
-namespace SimpleGame
+namespace SimpleGame.Engine
 {
     /// <summary>
     /// The main class.
