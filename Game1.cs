@@ -91,20 +91,21 @@ namespace SimpleGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.TransparentBlack);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
+            UpdatePlayerFieldOfView();
             foreach (Cell cell in _map.GetAllCells())
             {
                 var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
-                //if (!cell.IsInFov)
-                //{
-                //    continue;
-                //}
+                if (!cell.IsInFov)
+                {
+                    continue;
+                }
                 if (cell.IsWalkable)
                 {
                     spriteBatch.Draw(_floor, position,
@@ -139,6 +140,11 @@ namespace SimpleGame
                     return _map.GetCell(x, y);
                 }
             }
+        }
+
+        private void UpdatePlayerFieldOfView()
+        {
+            _map.ComputeFov(_player.X, _player.Y, 10, true);
         }
     }
 }
