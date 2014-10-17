@@ -13,6 +13,7 @@ namespace SimpleGame.Engine
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+        private InputState _inputState;
         private Texture2D _wall;
         private Texture2D _floor;
         private IMap _map;
@@ -35,6 +36,7 @@ namespace SimpleGame.Engine
             // TODO: Add your initialization logic here
             IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
             _map = Map.Create(mapCreationStrategy);
+            _inputState = new InputState();
 
             base.Initialize();
         }
@@ -82,6 +84,24 @@ namespace SimpleGame.Engine
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
+            _inputState.Update();
+            if (_inputState.IsLeft(null))
+            {
+                _player.X--;
+            }
+            else if (_inputState.IsRight(null))
+            {
+                _player.X++;
+            }
+            else if (_inputState.IsUp(null))
+            {
+                _player.Y--;
+            }
+            else if (_inputState.IsDown(null))
+            {
+                _player.Y++;
+            }
+            UpdatePlayerFieldOfView();
 
             base.Update(gameTime);
         }
