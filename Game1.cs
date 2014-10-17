@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using RogueSharp.Random;
+using SimpleGame.Entities;
 
 namespace SimpleGame
 {
@@ -16,6 +18,7 @@ namespace SimpleGame
         Texture2D _wall;
         Texture2D _floor;
         private IMap _map;
+        private Player _player;
 
         public Game1()
         {
@@ -50,6 +53,15 @@ namespace SimpleGame
             // TODO: use this.Content to load your game content here
             _wall = this.Content.Load<Texture2D>("Wall.png");
             _floor = this.Content.Load<Texture2D>("Floor.png");
+
+            Cell startingLoc = GetRandomWalkableCell();
+            _player = new Player
+            {
+                X = startingLoc.X,
+                Y = startingLoc.Y,
+                Scale = 0.5f,
+                Sprite = Content.Load<Texture2D>("Player.png")
+            };
         }
 
         /// <summary>
@@ -85,23 +97,48 @@ namespace SimpleGame
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             const int sizeOfSprites = 32;
-            //const float scale = .5f;
+            const float scale = .5f;
             foreach (Cell cell in _map.GetAllCells())
             {
-                var position = new Vector2(cell.X * sizeOfSprites * 1f, cell.Y * sizeOfSprites * 1f);
+                var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
+                //if (!cell.IsInFov)
+                //{
+                //    continue;
+                //}
                 if (cell.IsWalkable)
                 {
-                    spriteBatch.Draw(_floor, position, null, null, null, 0.0f, new Vector2(1f, 1f), Color.White);
+                    spriteBatch.Draw(_floor, position,
+                      null, null, null, 0.0f, new Vector2(scale, scale),
+                      Color.White, SpriteEffects.None, 0.8f);
                 }
                 else
                 {
-                    spriteBatch.Draw(_wall, position, null, null, null, 0.0f, new Vector2(1f, 1f), Color.White);
+                    spriteBatch.Draw(_wall, position,
+                       null, null, null, 0.0f, new Vector2(scale, scale),
+                       Color.White, SpriteEffects.None, 0.8f);
                 }
             }
+
+            _player.Draw(spriteBatch);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private Cell GetRandomWalkableCell()
+        {
+            IRandom random = new DotNetRandom();
+
+            while (true)
+            {
+                int x = random.Next(49);
+                int y = random.Next(29);
+                if (_map.IsWalkable(x, y))
+                {
+                    return _map.GetCell(x, y);
+                }
+            }
         }
     }
 }
