@@ -210,7 +210,7 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Left, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadLeft, controllingPlayer, out playerIndex )
-                || IsNewButtonPress( Buttons.LeftThumbstickLeft, controllingPlayer, out playerIndex );
+                || IsNewButtonPress(Buttons.LeftThumbstickLeft, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.A, controllingPlayer, out playerIndex);
       }
 
       public bool IsRight( PlayerIndex? controllingPlayer )
@@ -218,7 +218,7 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Right, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadRight, controllingPlayer, out playerIndex )
-                || IsNewButtonPress( Buttons.LeftThumbstickRight, controllingPlayer, out playerIndex );
+                || IsNewButtonPress(Buttons.LeftThumbstickRight, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.D, controllingPlayer, out playerIndex);
       }
 
       public bool IsUp( PlayerIndex? controllingPlayer )
@@ -226,7 +226,7 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Up, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadUp, controllingPlayer, out playerIndex )
-                || IsNewButtonPress( Buttons.LeftThumbstickUp, controllingPlayer, out playerIndex );
+                || IsNewButtonPress(Buttons.LeftThumbstickUp, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.W, controllingPlayer, out playerIndex);
       }
 
       public bool IsDown( PlayerIndex? controllingPlayer )
@@ -234,7 +234,7 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Down, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadDown, controllingPlayer, out playerIndex )
-                || IsNewButtonPress( Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex );
+                || IsNewButtonPress(Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.S, controllingPlayer, out playerIndex);
       }
 
       public bool IsSpace( PlayerIndex? controllingPlayer )
