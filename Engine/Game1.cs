@@ -4,19 +4,17 @@ using RogueSharp;
 using RogueSharp.Random;
 using SimpleGame.Entities;
 
-namespace SimpleGame
+namespace SimpleGame.Engine
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Vector2 wallVector = new Vector2(0, 0);
-        Vector2 floorVector = new Vector2(32, 32);
-        Texture2D _wall;
-        Texture2D _floor;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Texture2D _wall;
+        private Texture2D _floor;
         private IMap _map;
         private Player _player;
 
@@ -54,7 +52,7 @@ namespace SimpleGame
             _wall = this.Content.Load<Texture2D>("Wall.png");
             _floor = this.Content.Load<Texture2D>("Floor.png");
 
-            Cell startingLoc = GetRandomWalkableCell();
+            Cell startingLoc = MapExtensions.GetRandomWalkableCell(_map);
             _player = new Player
             {
                 X = startingLoc.X,
@@ -62,6 +60,9 @@ namespace SimpleGame
                 Scale = 0.5f,
                 Sprite = Content.Load<Texture2D>("Player.png")
             };
+
+            //Set starting FOV
+            UpdatePlayerFieldOfView();
         }
 
         /// <summary>
@@ -98,20 +99,27 @@ namespace SimpleGame
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
-            UpdatePlayerFieldOfView();
+            //iterate through each cell
             foreach (Cell cell in _map.GetAllCells())
             {
+                //calulate curr position based on sprite size and scale
                 var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
+
+                //visible to player
                 if (!cell.IsInFov)
                 {
                     continue;
                 }
+
+                //floor tile
                 if (cell.IsWalkable)
                 {
                     spriteBatch.Draw(_floor, position,
                       null, null, null, 0.0f, new Vector2(scale, scale),
                       Color.White, SpriteEffects.None, 0.8f);
                 }
+
+                //wall
                 else
                 {
                     spriteBatch.Draw(_wall, position,
@@ -120,26 +128,12 @@ namespace SimpleGame
                 }
             }
 
+            //draw the player sprite
             _player.Draw(spriteBatch);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private Cell GetRandomWalkableCell()
-        {
-            IRandom random = new DotNetRandom();
-
-            while (true)
-            {
-                int x = random.Next(49);
-                int y = random.Next(29);
-                if (_map.IsWalkable(x, y))
-                {
-                    return _map.GetCell(x, y);
-                }
-            }
         }
 
         private void UpdatePlayerFieldOfView()
