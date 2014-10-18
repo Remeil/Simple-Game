@@ -210,7 +210,8 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Left, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadLeft, controllingPlayer, out playerIndex )
-                || IsNewButtonPress(Buttons.LeftThumbstickLeft, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.A, controllingPlayer, out playerIndex);
+                || IsNewButtonPress(Buttons.LeftThumbstickLeft, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.A, controllingPlayer, out playerIndex) ||
+                IsNewKeyPress(Keys.NumPad4, controllingPlayer, out playerIndex);
       }
 
       public bool IsRight( PlayerIndex? controllingPlayer )
@@ -218,7 +219,8 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Right, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadRight, controllingPlayer, out playerIndex )
-                || IsNewButtonPress(Buttons.LeftThumbstickRight, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.D, controllingPlayer, out playerIndex);
+                || IsNewButtonPress(Buttons.LeftThumbstickRight, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.D, controllingPlayer, out playerIndex) ||
+                IsNewKeyPress(Keys.NumPad6, controllingPlayer, out playerIndex);
       }
 
       public bool IsUp( PlayerIndex? controllingPlayer )
@@ -226,7 +228,8 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Up, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadUp, controllingPlayer, out playerIndex )
-                || IsNewButtonPress(Buttons.LeftThumbstickUp, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.W, controllingPlayer, out playerIndex);
+                || IsNewButtonPress(Buttons.LeftThumbstickUp, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.W, controllingPlayer, out playerIndex) ||
+                IsNewKeyPress(Keys.NumPad8, controllingPlayer, out playerIndex);
       }
 
       public bool IsDown( PlayerIndex? controllingPlayer )
@@ -234,7 +237,36 @@ namespace SimpleGame.Engine
          PlayerIndex playerIndex;
 
          return IsNewKeyPress( Keys.Down, controllingPlayer, out playerIndex ) || IsNewButtonPress( Buttons.DPadDown, controllingPlayer, out playerIndex )
-                || IsNewButtonPress(Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.S, controllingPlayer, out playerIndex);
+                || IsNewButtonPress(Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex) || IsNewKeyPress(Keys.S, controllingPlayer, out playerIndex) ||
+                IsNewKeyPress(Keys.NumPad2, controllingPlayer, out playerIndex);
+      }
+
+      public bool IsUpLeft(PlayerIndex? controllingPlayer)
+      {
+          PlayerIndex playerIndex;
+
+          return IsNewKeyPress(Keys.NumPad7, controllingPlayer, out playerIndex);
+      }
+
+      public bool IsUpRight(PlayerIndex? controllingPlayer)
+      {
+          PlayerIndex playerIndex;
+
+          return IsNewKeyPress(Keys.NumPad9, controllingPlayer, out playerIndex);
+      }
+
+      public bool IsDownLeft(PlayerIndex? controllingPlayer)
+      {
+          PlayerIndex playerIndex;
+
+          return IsNewKeyPress(Keys.NumPad1, controllingPlayer, out playerIndex);
+      }
+
+      public bool IsDownRight(PlayerIndex? controllingPlayer)
+      {
+          PlayerIndex playerIndex;
+
+          return IsNewKeyPress(Keys.NumPad3, controllingPlayer, out playerIndex);
       }
 
       public bool IsSpace( PlayerIndex? controllingPlayer )
