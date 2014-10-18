@@ -10,13 +10,8 @@ using SimpleGame.Engine;
 
 namespace SimpleGame.Entities
 {
-    public class Player
+    public class Player : BaseEntity
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public float Scale { get; set; }
-        public Texture2D Sprite { get; set; }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
