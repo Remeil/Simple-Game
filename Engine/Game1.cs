@@ -13,6 +13,7 @@ namespace SimpleGame.Engine
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+        private InputState _inputState;
         private Texture2D _wall;
         private Texture2D _floor;
         private IMap _map;
@@ -35,6 +36,7 @@ namespace SimpleGame.Engine
             // TODO: Add your initialization logic here
             IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
             _map = Map.Create(mapCreationStrategy);
+            _inputState = new InputState();
 
             base.Initialize();
         }
@@ -81,8 +83,18 @@ namespace SimpleGame.Engine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
+            if (_inputState.IsExitGame(PlayerIndex.One))
+            {
+                Exit();
+            }
 
+            _inputState.Update();
+
+            if (_player.HandleInput(_inputState, _map))
+            {
+                UpdatePlayerFieldOfView();
+            }
+            
             base.Update(gameTime);
         }
 
@@ -105,10 +117,17 @@ namespace SimpleGame.Engine
                 //calulate curr position based on sprite size and scale
                 var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
 
-                //visible to player
-                if (!cell.IsInFov)
+                //not currently visible to player
+                if (!cell.IsExplored)
                 {
                     continue;
+                }
+
+                //cell has been explored but is not in FOV
+                var tint = Color.White;
+                if (!cell.IsInFov)
+                {
+                    tint = Color.DarkGray;
                 }
 
                 //floor tile
@@ -116,7 +135,7 @@ namespace SimpleGame.Engine
                 {
                     spriteBatch.Draw(_floor, position,
                       null, null, null, 0.0f, new Vector2(scale, scale),
-                      Color.White, SpriteEffects.None, 0.8f);
+                      tint, SpriteEffects.None, 0.8f);
                 }
 
                 //wall
@@ -124,7 +143,7 @@ namespace SimpleGame.Engine
                 {
                     spriteBatch.Draw(_wall, position,
                        null, null, null, 0.0f, new Vector2(scale, scale),
-                       Color.White, SpriteEffects.None, 0.8f);
+                       tint, SpriteEffects.None, 0.8f);
                 }
             }
 
@@ -139,6 +158,13 @@ namespace SimpleGame.Engine
         private void UpdatePlayerFieldOfView()
         {
             _map.ComputeFov(_player.X, _player.Y, 10, true);
+            foreach (Cell cell in _map.GetAllCells())
+            {
+                if (_map.IsInFov(cell.X, cell.Y))
+                {
+                    _map.SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
+                }
+            }
         }
     }
 }
