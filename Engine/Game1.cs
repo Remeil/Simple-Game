@@ -69,8 +69,8 @@ namespace SimpleGame.Engine
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
-                Scale = .5f,
-                Sprite = Content.Load<Texture2D>("Player.png")
+                Scale = 0.5f,
+                Sprite = Content.Load<Texture2D>("Enemy.png")
             };
 
             //Set starting FOV

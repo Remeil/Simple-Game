@@ -10,14 +10,14 @@ namespace SimpleGame.Engine
 {
     public static class MapExtensions
     {
+        private static readonly IRandom Random = new DotNetRandom();
+
         public static Cell GetRandomWalkableCell(IMap map)
         {
-            IRandom random = new DotNetRandom();
-
             while (true)
             {
-                int x = random.Next(49);
-                int y = random.Next(29);
+                int x = Random.Next(49);
+                int y = Random.Next(29);
                 if (map.IsWalkable(x, y))
                 {
                     return map.GetCell(x, y);
