@@ -53,7 +53,6 @@ namespace SimpleGame.Entities
             {
                 Y++;
             }
-            Console.WriteLine("X: " + X + " Y: " + Y);
         }
     }
 }
