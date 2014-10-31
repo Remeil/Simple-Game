@@ -65,7 +65,7 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            _enemy = new Enemy
+            _enemy = new Enemy (_map)
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,

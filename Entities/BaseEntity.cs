@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using RogueSharp;
 
 namespace SimpleGame.Entities
 {
@@ -13,5 +9,7 @@ namespace SimpleGame.Entities
         public int Y { get; set; }
         public float Scale { get; set; }
         public Texture2D Sprite { get; set; }
+        public PathFinder PathFinder { get; set; }
+        public IMap Map { get; set; }
     }
 }

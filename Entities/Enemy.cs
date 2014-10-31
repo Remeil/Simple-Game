@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
@@ -7,6 +8,17 @@ namespace SimpleGame.Entities
 {
     public class Enemy : BaseEntity
     {
+        public Enemy()
+        {
+            
+        }
+
+        public Enemy(IMap map)
+        {
+            Map = map;
+            PathFinder = new PathFinder(map);
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
@@ -15,44 +27,18 @@ namespace SimpleGame.Entities
               Color.White, SpriteEffects.None, 0.4f);
         }
 
+        public void GoToPoint(int destX, int destY)
+        {
+            var nextSquare = PathFinder.ShortestPath(Map.GetCell(X, Y), Map.GetCell(destX, destY)).First();
+            X = nextSquare.X;
+            Y = nextSquare.Y;
+        }
+
         public void ChasePlayer(Player player, IMap map)
         {
-            if (X < player.X && Y < player.Y && map.IsWalkable(X + 1, Y + 1))
-            {
-                X++;
-                Y++;
-            }
-            else if (X < player.X && Y > player.Y && map.IsWalkable(X + 1, Y - 1))
-            {
-                X++;
-                Y--;
-            }
-            else if (X > player.X && Y > player.Y && map.IsWalkable(X - 1, Y - 1))
-            {
-                X--;
-                Y--;
-            }
-            else if (X > player.X && Y < player.Y && map.IsWalkable(X - 1, Y + 1))
-            {
-                X--;
-                Y++;
-            }
-            else if (X < player.X && map.IsWalkable(X + 1, Y))
-            {
-                X++;
-            }
-            else if (X > player.X && map.IsWalkable(X - 1, Y))
-            {
-                X--;
-            }
-            else if (Y > player.Y && map.IsWalkable(X, Y - 1))
-            {
-                Y--;
-            }
-            else if (Y < player.Y && map.IsWalkable(X, Y + 1))
-            {
-                Y++;
-            }
+            var nextSquare = PathFinder.ShortestPath(map.GetCell(X, Y), map.GetCell(player.X, player.Y)).First();
+            X = nextSquare.X;
+            Y = nextSquare.Y;
         }
 
         public bool IsVisible(IMap map)
