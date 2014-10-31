@@ -54,5 +54,10 @@ namespace SimpleGame.Entities
                 Y++;
             }
         }
+
+        public bool IsVisible(IMap map)
+        {
+            return map.IsInFov(X, Y);
+        }
     }
 }

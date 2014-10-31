@@ -12,7 +12,7 @@ namespace SimpleGame.Engine
     {
         private static readonly IRandom Random = new DotNetRandom();
 
-        public static Cell GetRandomWalkableCell(IMap map)
+        public static Cell GetRandomWalkableCell(this IMap map)
         {
             while (true)
             {

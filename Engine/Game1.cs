@@ -55,7 +55,7 @@ namespace SimpleGame.Engine
             _wall = this.Content.Load<Texture2D>("Wall.png");
             _floor = this.Content.Load<Texture2D>("Floor.png");
 
-            Cell startingLoc = MapExtensions.GetRandomWalkableCell(_map);
+            Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
             {
                 X = startingLoc.X,
@@ -64,7 +64,7 @@ namespace SimpleGame.Engine
                 Sprite = Content.Load<Texture2D>("Player.png")
             };
 
-            Cell otherStartingLoc = MapExtensions.GetRandomWalkableCell(_map);
+            Cell otherStartingLoc = _map.GetRandomWalkableCell();
             _enemy = new Enemy
             {
                 X = otherStartingLoc.X,
@@ -160,7 +160,11 @@ namespace SimpleGame.Engine
 
             //draw the player sprite
             _player.Draw(spriteBatch);
-            _enemy.Draw(spriteBatch);
+
+            if (_enemy.IsVisible(_map))
+            {
+                _enemy.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
