@@ -18,6 +18,7 @@ namespace SimpleGame.Engine
         private Texture2D _floor;
         private IMap _map;
         private Player _player;
+        private Enemy _enemy;
 
         public Game1()
         {
@@ -54,13 +55,22 @@ namespace SimpleGame.Engine
             _wall = this.Content.Load<Texture2D>("Wall.png");
             _floor = this.Content.Load<Texture2D>("Floor.png");
 
-            Cell startingLoc = MapExtensions.GetRandomWalkableCell(_map);
+            Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
             {
                 X = startingLoc.X,
                 Y = startingLoc.Y,
                 Scale = 0.5f,
                 Sprite = Content.Load<Texture2D>("Player.png")
+            };
+
+            Cell otherStartingLoc = _map.GetRandomWalkableCell();
+            _enemy = new Enemy (_map)
+            {
+                X = otherStartingLoc.X,
+                Y = otherStartingLoc.Y,
+                Scale = 0.5f,
+                Sprite = Content.Load<Texture2D>("Enemy.png")
             };
 
             //Set starting FOV
@@ -93,6 +103,7 @@ namespace SimpleGame.Engine
             if (_player.HandleInput(_inputState, _map))
             {
                 UpdatePlayerFieldOfView();
+                _enemy.ChasePlayer(_player, _map);
             }
             
             base.Update(gameTime);
@@ -149,6 +160,11 @@ namespace SimpleGame.Engine
 
             //draw the player sprite
             _player.Draw(spriteBatch);
+
+            if (_enemy.IsVisible(_map))
+            {
+                _enemy.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 

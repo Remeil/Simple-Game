@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
 
 namespace SimpleGame.Entities
 {
-    public class Player
+    public class Player : BaseEntity
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public float Scale { get; set; }
-        public Texture2D Sprite { get; set; }
+
+        public Player()
+        {
+            
+        }
+
+        public Player(IMap map)
+        {
+            Map = map;
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -23,6 +24,11 @@ namespace SimpleGame.Entities
             spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.5f);
+        }
+
+        public bool HandleInput(InputState inputState)
+        {
+            return HandleInput(inputState, Map);
         }
 
         public bool HandleInput(InputState inputState, IMap map)
@@ -55,42 +61,6 @@ namespace SimpleGame.Entities
             {
                 if (map.IsWalkable(X, Y + 1))
                 {
-                    Y++;
-                    return true;
-                }
-            }
-            else if (inputState.IsUpLeft(null))
-            {
-                if (map.IsWalkable(X - 1, Y - 1))
-                {
-                    X--;
-                    Y--;
-                    return true;
-                }
-            }
-            else if (inputState.IsUpRight(null))
-            {
-                if (map.IsWalkable(X + 1, Y - 1))
-                {
-                    X++;
-                    Y--;
-                    return true;
-                }
-            }
-            else if (inputState.IsDownLeft(null))
-            {
-                if (map.IsWalkable(X - 1, Y + 1))
-                {
-                    X--;
-                    Y++;
-                    return true;
-                }
-            }
-            else if (inputState.IsDownRight(null))
-            {
-                if (map.IsWalkable(X + 1, Y + 1))
-                {
-                    X++;
                     Y++;
                     return true;
                 }

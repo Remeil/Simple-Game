@@ -241,34 +241,6 @@ namespace SimpleGame.Engine
                 IsNewKeyPress(Keys.NumPad2, controllingPlayer, out playerIndex);
       }
 
-      public bool IsUpLeft(PlayerIndex? controllingPlayer)
-      {
-          PlayerIndex playerIndex;
-
-          return IsNewKeyPress(Keys.NumPad7, controllingPlayer, out playerIndex);
-      }
-
-      public bool IsUpRight(PlayerIndex? controllingPlayer)
-      {
-          PlayerIndex playerIndex;
-
-          return IsNewKeyPress(Keys.NumPad9, controllingPlayer, out playerIndex);
-      }
-
-      public bool IsDownLeft(PlayerIndex? controllingPlayer)
-      {
-          PlayerIndex playerIndex;
-
-          return IsNewKeyPress(Keys.NumPad1, controllingPlayer, out playerIndex);
-      }
-
-      public bool IsDownRight(PlayerIndex? controllingPlayer)
-      {
-          PlayerIndex playerIndex;
-
-          return IsNewKeyPress(Keys.NumPad3, controllingPlayer, out playerIndex);
-      }
-
       public bool IsSpace( PlayerIndex? controllingPlayer )
       {
          PlayerIndex playerIndex;
