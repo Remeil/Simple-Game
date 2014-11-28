@@ -65,42 +65,6 @@ namespace SimpleGame.Entities
                     return true;
                 }
             }
-            else if (inputState.IsUpLeft(null))
-            {
-                if (map.IsWalkable(X - 1, Y - 1))
-                {
-                    X--;
-                    Y--;
-                    return true;
-                }
-            }
-            else if (inputState.IsUpRight(null))
-            {
-                if (map.IsWalkable(X + 1, Y - 1))
-                {
-                    X++;
-                    Y--;
-                    return true;
-                }
-            }
-            else if (inputState.IsDownLeft(null))
-            {
-                if (map.IsWalkable(X - 1, Y + 1))
-                {
-                    X--;
-                    Y++;
-                    return true;
-                }
-            }
-            else if (inputState.IsDownRight(null))
-            {
-                if (map.IsWalkable(X + 1, Y + 1))
-                {
-                    X++;
-                    Y++;
-                    return true;
-                }
-            }
             return false;
         }
 
