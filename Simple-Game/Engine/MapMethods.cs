@@ -1,4 +1,5 @@
-﻿using RogueSharp;
+﻿using System.Linq;
+using RogueSharp;
 using RogueSharp.Random;
 
 namespace SimpleGame.Engine
@@ -9,10 +10,15 @@ namespace SimpleGame.Engine
 
         public static Cell GetRandomWalkableCell(this IMap map)
         {
+            bool walkable = map.GetAllCells().Any(cell => cell.IsWalkable);
+            if (!walkable)
+            {
+                return null;
+            }
             while (true)
             {
-                int x = Random.Next(49);
-                int y = Random.Next(29);
+                int x = Random.Next(map.Width);
+                int y = Random.Next(map.Height);
                 if (map.IsWalkable(x, y))
                 {
                     return map.GetCell(x, y);
