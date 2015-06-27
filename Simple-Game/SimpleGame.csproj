@@ -54,6 +54,7 @@
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Engine\Game1.cs" />
     <Compile Include="Engine\Main.cs" />
+    <Compile Include="Entities\StatBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

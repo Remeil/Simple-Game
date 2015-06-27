@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 
 namespace SimpleGame.Entities
@@ -11,5 +12,18 @@ namespace SimpleGame.Entities
         public Texture2D Sprite { get; set; }
         public PathFinder PathFinder { get; set; }
         public IMap Map { get; set; }
+        public string Name { get; set; }
+        public StatBlock Stats { get; set; }
+
+        public bool IsAlive
+        {
+            get { return Stats.CurrentHp > 0; }
+        }
+
+        public void TakeDamage(decimal damage, string name)
+        {
+            Stats.CurrentHp -= damage;
+            Console.WriteLine(name + " has dealt " + damage + " damage to " + Name);
+        }
     }
 }
