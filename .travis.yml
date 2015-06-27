@@ -4,5 +4,5 @@ install:
   - nuget restore Simple-Game/SimpleGame.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release solution-name.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./SimpleGameTests/bin/Debug/SimpleGameTests.dll
+  - xbuild /p:Configuration=Release Simple-Game/SimpleGame.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./SimpleGameTests/bin/Release/SimpleGameTests.dll
