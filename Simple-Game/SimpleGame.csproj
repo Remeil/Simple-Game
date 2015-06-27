@@ -47,10 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\CombatMethods.cs" />
     <Compile Include="Engine\InputState.cs" />
     <Compile Include="Engine\MapMethods.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Enemy.cs" />
+    <Compile Include="Entities\Inventory.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Engine\Game1.cs" />
     <Compile Include="Engine\Main.cs" />

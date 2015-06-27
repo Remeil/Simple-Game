@@ -6,7 +6,12 @@ namespace SimpleGame.Engine
 {
     public static class MapExtensions
     {
-        private static readonly IRandom Random = new DotNetRandom();
+        private static IRandom Random { get; set; }
+
+        static MapExtensions()
+        {
+            Random = new DotNetRandom();
+        }
 
         public static Cell GetRandomWalkableCell(this IMap map)
         {

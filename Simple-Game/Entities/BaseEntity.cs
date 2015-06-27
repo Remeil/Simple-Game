@@ -14,6 +14,8 @@ namespace SimpleGame.Entities
         public IMap Map { get; set; }
         public string Name { get; set; }
         public StatBlock Stats { get; set; }
+        public decimal WeaponDamage { get; set; }
+        public decimal ArmorBlock { get; set; }
 
         public bool IsAlive
         {

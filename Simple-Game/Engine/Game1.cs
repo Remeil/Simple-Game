@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using RogueSharp.Random;
 using SimpleGame.Entities;
 
 namespace SimpleGame.Engine
