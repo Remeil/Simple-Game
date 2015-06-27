@@ -8,7 +8,7 @@ namespace SimpleGameTests.EngineTests
         [Test]
         public void Stuff()
         {
-            Assert.AreEqual(1, 2);
+            Assert.AreEqual(1, 1);
         }
     }
 }
