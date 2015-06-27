@@ -67,10 +67,11 @@ namespace SimpleGameTests.EngineTests
             //Arrange
             DamageDealer.WeaponDamage = 10;
             DamageDealer.Stats.BaseAttackPower = attackValue;
+            DamageTaker.ArmorBlock = 0;
             CombatMethods.Random = new KnownSeriesRandom(new[] { damageMod });
 
             //Act
-            var expectedValue = DamageDealer.WeaponDamage * ((decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
+            var expectedValue = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
 
             //Assert
@@ -100,6 +101,7 @@ namespace SimpleGameTests.EngineTests
         [TestCase(0)]
         [TestCase(30)]
         [TestCase(90)]
+        [TestCase(1000000)]
         public void CalculateDamage_GivenDamageBlocksAllDamage_DamageIsMinimumValue(int weaponDamage)
         {
             //Arrange
