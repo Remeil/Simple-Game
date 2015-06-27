@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using RogueSharp.Random;
 using SimpleGame.Engine;
 using SimpleGame.Entities;
@@ -64,11 +65,50 @@ namespace SimpleGameTests.EngineTests
         public void CalculateDamage_GivenNoDamageBlock_DamageIsCorrect(int attackValue, int damageMod)
         {
             //Arrange
+            DamageDealer.WeaponDamage = 10;
             DamageDealer.Stats.BaseAttackPower = attackValue;
             CombatMethods.Random = new KnownSeriesRandom(new[] { damageMod });
 
             //Act
             var expectedValue = DamageDealer.WeaponDamage * ((decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
+            var actual = DamageDealer.CalculateDamageOn(DamageTaker);
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual);
+        }
+
+        [TestCase(10, 5, 100)]
+        [TestCase(20, 5, 100)]
+        [TestCase(40, 20, 120)]
+        public void CalculateDamage_GivenDamageBlock_DamageIsCorrect(int weaponDamage, int damageBlock, int damageMod)
+        {
+            //Arrange
+            DamageDealer.WeaponDamage = weaponDamage;
+            DamageTaker.ArmorBlock = damageBlock;
+            CombatMethods.Random = new KnownSeriesRandom(new [] { damageMod });
+
+            //Act
+            var expectedAttack = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
+            var expectedBlock = DamageTaker.ArmorBlock * (1 + (decimal)DamageTaker.Stats.DefensePower / 30);
+            var expectedValue = expectedAttack - expectedBlock;
+            var actual = DamageDealer.CalculateDamageOn(DamageTaker);
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual);
+        }
+
+        [TestCase(0)]
+        [TestCase(30)]
+        [TestCase(90)]
+        public void CalculateDamage_GivenDamageBlocksAllDamage_DamageIsMinimumValue(int weaponDamage)
+        {
+            //Arrange
+            DamageDealer.WeaponDamage = weaponDamage;
+            DamageTaker.ArmorBlock = weaponDamage;
+            CombatMethods.Random = new KnownSeriesRandom(new[] { 100 });
+
+            //Act
+            var expectedValue = weaponDamage*.05;
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
 
             //Assert
