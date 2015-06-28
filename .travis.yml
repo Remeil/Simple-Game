@@ -8,6 +8,7 @@ script:
 - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./SimpleGameTests/bin/Release/SimpleGameTests.dll
 notifications:
   hipchat: 
-	secure: "V0onDSslRdTc3ST/4jC1f3YxG885SDJN4x+NLygaVshbp89JBQGhyMst3eDmKhvFDQu3rn8JEFw5SlcNnkKoKVYNjybpaIJv548k0trIDFkjG4t/Q9Rjulu5sIcR7zxkYc4li8P4K2ytpyrcRXflgS5kF6uAtzo2teotiXRjyUs="
+	rooms:
+		secure: "V0onDSslRdTc3ST/4jC1f3YxG885SDJN4x+NLygaVshbp89JBQGhyMst3eDmKhvFDQu3rn8JEFw5SlcNnkKoKVYNjybpaIJv548k0trIDFkjG4t/Q9Rjulu5sIcR7zxkYc4li8P4K2ytpyrcRXflgS5kF6uAtzo2teotiXRjyUs="
     template:
       - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
