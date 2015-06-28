@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Models;
 
 namespace SimpleGame.Entities
 {

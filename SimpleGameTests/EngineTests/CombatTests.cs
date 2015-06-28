@@ -3,6 +3,7 @@ using NUnit.Framework;
 using RogueSharp.Random;
 using SimpleGame.Engine;
 using SimpleGame.Entities;
+using SimpleGame.Models;
 
 namespace SimpleGameTests.EngineTests
 {
@@ -155,7 +156,7 @@ namespace SimpleGameTests.EngineTests
             Assert.IsTrue(damageMod >= 80 && damageMod <= 120);
 
             //Arrange
-            CombatMethods.Random = new KnownSeriesRandom(new[] { damageMod });
+            CombatMethods.Random = new KnownSeriesRandom(damageMod);
 
             //Act
             var expectedAttack = 10 * (damageMod / 100.0);
@@ -173,16 +174,16 @@ namespace SimpleGameTests.EngineTests
         [TestCase(99, 10000)]
         [TestCase(0, 100)]
         [TestCase(50, 5000)]
-        public void TryToHit_GivenVaryingDodgeChances_HitsAreCorrect(int dodge, int roll)
+        public void TryToHitMelee_GivenVaryingDodgeChances_HitsAreCorrect(int dodge, int roll)
         {
             //Arrange
-            CombatMethods.Random = new KnownSeriesRandom(new [] {roll});
+            CombatMethods.Random = new KnownSeriesRandom(roll);
             DamageTaker.Stats.BaseDodge = dodge;
 
             //Act
             //We expect to get hit if we fail the dodge roll
-            var expected = DamageTaker.Stats.DodgeChance < (decimal)roll / 10000; 
-            var actual = DamageDealer.TryToHit(DamageTaker);
+            var expected = DamageTaker.Stats.DodgeChance < (decimal)roll / 10000;
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Melee);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -195,10 +196,10 @@ namespace SimpleGameTests.EngineTests
         [TestCase(99, 10000)]
         [TestCase(0, 100)]
         [TestCase(50, 5000)]
-        public void TryToHit_GivenVaryingAccuracyChances_HitsAreCorrect(int accuracy, int roll)
+        public void TryToHitMelee_GivenVaryingAccuracyChances_HitsAreCorrect(int accuracy, int roll)
         {
             //Arrange
-            CombatMethods.Random = new KnownSeriesRandom(new [] {1, roll});
+            CombatMethods.Random = new KnownSeriesRandom(1, roll);
             DamageDealer.Stats.BaseAccuracy = accuracy;
 
             //We only make an accuracy check if we dodge successfully.
@@ -206,7 +207,7 @@ namespace SimpleGameTests.EngineTests
 
             //Act
             var expected = DamageDealer.Stats.AccuracyChance >= (decimal)roll / 10000;
-            var actual = DamageDealer.TryToHit(DamageTaker);
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Melee);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -219,16 +220,68 @@ namespace SimpleGameTests.EngineTests
         [TestCase(100, 0, new[] { 6700, 2200 })]
         [TestCase(50, 50, new[] { 5000, 5000 })]
         [TestCase(0, 0, new[] { 10000, 10000 })]
-        public void TryToHit_GivenVaryingAccuracyAndDodgeChances_HitsAreCorrect(int dodge, int accuracy, int[] rolls)
+        public void TryToHitMelee_GivenVaryingAccuracyAndDodgeChances_HitsAreCorrect(int dodge, int accuracy, int[] rolls)
         {
             //Arrange
-            CombatMethods.Random =new KnownSeriesRandom(rolls);
+            CombatMethods.Random = new KnownSeriesRandom(rolls);
             DamageDealer.Stats.BaseAccuracy = accuracy;
             DamageTaker.Stats.BaseDodge = dodge;
 
             //Act
             var expected = DamageTaker.Stats.DodgeChance < (decimal)rolls[0] / 10000 || DamageDealer.Stats.AccuracyChance >= (decimal)rolls[1] / 10000;
-            var actual = DamageDealer.TryToHit(DamageTaker);
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Melee);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(0, 10000)]
+        [TestCase(100, 500)]
+        [TestCase(50, 5000)]
+        [TestCase(30, 2500)]
+        public void TryToHitRanged_GivenVaryingAccuracyAndNoDodge_HitsAreCorrect(int accuracy, int roll)
+        {
+            //Arrange
+            CombatMethods.Random = new KnownSeriesRandom(roll);
+            DamageDealer.Stats.BaseAccuracy = accuracy;
+
+            //Act
+            var expected = DamageDealer.Stats.AccuracyChance >= (decimal)roll / 10000;
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Ranged);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TryToHitRanged_GivenNoAccuracy_AttackDoesntHaveAChance()
+        {
+            //Arrange
+            
+            //Act
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Ranged);
+
+            //Assert
+            Assert.IsFalse(actual);
+        }
+
+        [TestCase(100, 0, new[] { 1, 1 })]
+        [TestCase(100, 100, new[] { 1, 1 })]
+        [TestCase(0, 100, new[] { 1, 1 })]
+        [TestCase(50, 50, new[] { 5000, 5000 })]
+        [TestCase(80, 20, new[] { 7500, 100 })]
+        [TestCase(80, 20, new[] { 100, 7500 })]
+        [TestCase(0, 0, new[] { 1, 1 })]
+        public void TryToHitRanged_GivenAccuracyAndDodge_HitsAreCorrect(int accuracy, int dodge, int[] rolls)
+        {
+            //Arrange
+            CombatMethods.Random = new KnownSeriesRandom(rolls);
+            DamageDealer.Stats.BaseAccuracy = accuracy;
+            DamageTaker.Stats.BaseDodge = dodge;
+
+            //Act
+            var expected = (DamageDealer.Stats.AccuracyChance - CombatMethods.Random.Next(1, 10000)) > (DamageTaker.Stats.DodgeChance - CombatMethods.Random.Next(1, 10000));
+            var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Ranged);
 
             //Assert
             Assert.AreEqual(expected, actual);
