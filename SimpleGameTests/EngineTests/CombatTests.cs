@@ -116,5 +116,28 @@ namespace SimpleGameTests.EngineTests
             //Assert
             Assert.AreEqual(expectedValue, actual);
         }
+
+        [TestCase(0, 0)]
+        [TestCase(30, 0)]
+        [TestCase(0, 30)]
+        [TestCase(30, 30)]
+        public void CalculateDamage_GivenVaryingAttackAndDefensePowers_DamageIsCorrect(int attackPower, int defensePower)
+        {
+            //Arrange
+            DamageDealer.WeaponDamage = 10;
+            DamageTaker.ArmorBlock = 5;
+            CombatMethods.Random = new KnownSeriesRandom(new [] { 100 });
+            DamageDealer.Stats.BaseAttackPower = attackPower;
+            DamageTaker.Stats.BaseDefensePower = defensePower;
+
+            //Act
+            var expectedAttack = 10 + (10*attackPower/30);
+            var expectedDefense = 5 + (5*defensePower/30);
+            var expectedValue = Math.Max(expectedAttack-expectedDefense, expectedAttack*.05);
+            var actual = DamageDealer.CalculateDamageOn(DamageTaker);
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual);
+        }
     }
 }
