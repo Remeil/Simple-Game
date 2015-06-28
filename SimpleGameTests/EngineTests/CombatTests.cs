@@ -98,7 +98,7 @@ namespace SimpleGameTests.EngineTests
             var expectedAttack = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30);
             var expectedBlock = DamageTaker.ArmorBlock * (1 + (decimal)DamageTaker.Stats.DefensePower / 30);
             var expectedValue = expectedAttack - expectedBlock;
-            var actual = DamageDealer.CalculateDamageOn(DamageTaker);
+            var actual = DamageDealer.CalculateDamageOn(DamageTaker); 
 
             //Assert
             Assert.AreEqual(expectedValue, actual);
