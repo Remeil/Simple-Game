@@ -14,5 +14,15 @@
         public int DefensePower { get { return BaseDefensePower + DefensePowerMod; } }
         public int BaseDefensePower { get; set; }
         public int DefensePowerMod { get; set; }
+
+        public int Dodge { get { return BaseDodge + DodgeMod; } }
+        public int BaseDodge { get; set; }
+        public int DodgeMod { get; set; }
+        public decimal DodgeChance { get { return (1 - ((decimal)30 / (Dodge + 30))); } }
+
+        public int Accuracy { get { return BaseAccuracy + AccuracyMod; }}
+        public int BaseAccuracy { get; set; }
+        public int AccuracyMod { get; set; }
+        public decimal AccuracyChance { get { return (1 - ((decimal)30.0 / (Accuracy + 30))); } }
     }
 }
