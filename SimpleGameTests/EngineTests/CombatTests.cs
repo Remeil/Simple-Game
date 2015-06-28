@@ -13,17 +13,26 @@ namespace SimpleGameTests.EngineTests
         public BaseEntity DamageDealer { get; set; }
 
         [TestFixtureSetUp]
-        public void Setup()
+        public void Init()
         {
             DamageDealer = new BaseEntity
             {
-                WeaponDamage = 10,
                 Stats = new StatBlock()
             };
             DamageTaker = new BaseEntity
             {
                 Stats = new StatBlock()
             };
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            DamageDealer.WeaponDamage = 10;
+            DamageTaker.ArmorBlock = 5;
+            DamageDealer.Stats.BaseAttackPower = 0;
+            DamageTaker.Stats.BaseDefensePower = 0;
+            CombatMethods.Random = new KnownSeriesRandom(new[] { 100 });
         }
 
         [TestCase(5, 10)]
@@ -59,37 +68,34 @@ namespace SimpleGameTests.EngineTests
             Assert.IsFalse(DamageTaker.IsAlive);
         }
 
-        [TestCase(10, 100)]
-        [TestCase(20, 80)]
-        [TestCase(100, 120)]
-        public void CalculateDamage_GivenNoDamageBlock_DamageIsCorrect(int attackValue, int damageMod)
+        [TestCase(10)]
+        [TestCase(20)]
+        [TestCase(100)]
+        public void CalculateDamage_GivenNoDamageBlock_DamageIsCorrect(int attackValue)
         {
             //Arrange
-            DamageDealer.WeaponDamage = 10;
             DamageDealer.Stats.BaseAttackPower = attackValue;
             DamageTaker.ArmorBlock = 0;
-            CombatMethods.Random = new KnownSeriesRandom(new[] { damageMod });
 
             //Act
-            var expectedValue = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
+            var expectedValue = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30);
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
 
             //Assert
             Assert.AreEqual(expectedValue, actual);
         }
 
-        [TestCase(10, 5, 100)]
-        [TestCase(20, 5, 100)]
-        [TestCase(40, 20, 120)]
-        public void CalculateDamage_GivenDamageBlock_DamageIsCorrect(int weaponDamage, int damageBlock, int damageMod)
+        [TestCase(10, 5)]
+        [TestCase(20, 5)]
+        [TestCase(40, 20)]
+        public void CalculateDamage_GivenDamageBlock_DamageIsCorrect(int weaponDamage, int damageBlock)
         {
             //Arrange
             DamageDealer.WeaponDamage = weaponDamage;
             DamageTaker.ArmorBlock = damageBlock;
-            CombatMethods.Random = new KnownSeriesRandom(new [] { damageMod });
 
             //Act
-            var expectedAttack = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30) * ((decimal)damageMod / 100);
+            var expectedAttack = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30);
             var expectedBlock = DamageTaker.ArmorBlock * (1 + (decimal)DamageTaker.Stats.DefensePower / 30);
             var expectedValue = expectedAttack - expectedBlock;
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
@@ -107,7 +113,6 @@ namespace SimpleGameTests.EngineTests
             //Arrange
             DamageDealer.WeaponDamage = weaponDamage;
             DamageTaker.ArmorBlock = weaponDamage;
-            CombatMethods.Random = new KnownSeriesRandom(new[] { 100 });
 
             //Act
             var expectedValue = weaponDamage*.05;
@@ -124,9 +129,6 @@ namespace SimpleGameTests.EngineTests
         public void CalculateDamage_GivenVaryingAttackAndDefensePowers_DamageIsCorrect(int attackPower, int defensePower)
         {
             //Arrange
-            DamageDealer.WeaponDamage = 10;
-            DamageTaker.ArmorBlock = 5;
-            CombatMethods.Random = new KnownSeriesRandom(new [] { 100 });
             DamageDealer.Stats.BaseAttackPower = attackPower;
             DamageTaker.Stats.BaseDefensePower = defensePower;
 
@@ -134,6 +136,24 @@ namespace SimpleGameTests.EngineTests
             var expectedAttack = 10 + (10*attackPower/30);
             var expectedDefense = 5 + (5*defensePower/30);
             var expectedValue = Math.Max(expectedAttack-expectedDefense, expectedAttack*.05);
+            var actual = DamageDealer.CalculateDamageOn(DamageTaker);
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual);
+        }
+
+        [TestCase(80)]
+        [TestCase(100)]
+        [TestCase(120)]
+        public void CalculateDamage_GivenVaryingDamageModifiers_DamageIsCorrect(int damageMod)
+        {
+            //Arrange
+            CombatMethods.Random = new KnownSeriesRandom(new[] { damageMod });
+
+            //Act
+            var expectedAttack = 10 * (damageMod / 100.0);
+            const int expectedDefense = 5;
+            var expectedValue = Math.Max(expectedAttack - expectedDefense, expectedAttack*.05);
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
 
             //Assert
