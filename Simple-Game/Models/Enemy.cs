@@ -35,7 +35,11 @@ namespace SimpleGame.Entities
 
         public void ChasePlayer(Player player, IMap map)
         {
-            var nextSquare = PathFinder.ShortestPath(map.GetCell(X, Y), map.GetCell(player.X, player.Y)).First();
+            var nextSquare = PathFinder.ShortestPath(map.GetCell(X, Y), map.GetCell(player.X, player.Y)).FirstOrDefault();
+            if (nextSquare == null)
+            {
+                return;
+            }
             X = nextSquare.X;
             Y = nextSquare.Y;
         }

@@ -265,16 +265,16 @@ namespace SimpleGameTests.EngineTests
             Assert.IsFalse(actual);
         }
 
-        [TestCase(100, 0, new[] { 1, 1 })]
-        [TestCase(100, 100, new[] { 1, 1 })]
-        [TestCase(0, 100, new[] { 1, 1 })]
-        [TestCase(50, 50, new[] { 5000, 5000 })]
-        [TestCase(80, 20, new[] { 7500, 100 })]
-        [TestCase(80, 20, new[] { 100, 7500 })]
-        [TestCase(0, 0, new[] { 1, 1 })]
-        [TestCase(50, 50, new[] { 4500, 5000 })]
-        [TestCase(50, 50, new[] { 4900, 5000 })]
-        public void TryToHitRanged_GivenAccuracyAndDodge_HitsAreCorrect(int accuracy, int dodge, int[] rolls)
+        [TestCase(100, 0, new[] { 1, 1 }, ExpectedResult = true)]
+        [TestCase(100, 100, new[] { 1, 1 }, ExpectedResult = false)]
+        [TestCase(0, 100, new[] { 1, 1 }, ExpectedResult = false)]
+        [TestCase(50, 50, new[] { 5000, 5000 }, ExpectedResult = false)]
+        [TestCase(80, 20, new[] { 7500, 100 }, ExpectedResult = false)]
+        [TestCase(80, 20, new[] { 100, 7500 }, ExpectedResult = true)]
+        [TestCase(0, 0, new[] { 1, 1 }, ExpectedResult = false)]
+        [TestCase(50, 50, new[] { 4500, 5000 }, ExpectedResult = true)]
+        [TestCase(50, 50, new[] { 4900, 5000 }, ExpectedResult = false)]
+        public bool TryToHitRanged_GivenAccuracyAndDodge_HitsAreCorrect(int accuracy, int dodge, int[] rolls)
         {
             //Arrange
             CombatMethods.Random = new KnownSeriesRandom(rolls);
@@ -282,40 +282,10 @@ namespace SimpleGameTests.EngineTests
             DamageTaker.Stats.BaseDodge = dodge;
 
             //Act
-            var expected = TryToHitRanged(DamageDealer, DamageTaker);
-
-            CombatMethods.Random = new KnownSeriesRandom(rolls);
             var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Ranged);
 
             //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        private static bool TryToHitRanged(BaseEntity attacker, BaseEntity defender)
-        {
-            var accuracy = attacker.Stats.AccuracyChance;
-            var dodge = defender.Stats.DodgeChance;
-            while (true)
-            {
-                var roll = CombatMethods.Random.Next(1, 10000);
-                if (accuracy >= (decimal)roll / 10000)
-                {
-                    var roll2 = CombatMethods.Random.Next(1, 10000);
-                    if (dodge < (decimal)roll2 / 10000)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        dodge *= (decimal).9;
-                        accuracy *= (decimal).9;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            return actual;
         }
     }
 }
