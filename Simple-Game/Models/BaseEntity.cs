@@ -34,7 +34,9 @@ namespace SimpleGame.Entities
         {
             if (map.IsWalkable(xCoord, yCoord))
             {
-                if (Math.Abs(xCoord - X) <= 1 && Math.Abs(yCoord - Y) <= 1)
+                var xDist = Math.Abs(xCoord - X);
+                var yDist = Math.Abs(yCoord - Y);
+                if (xDist <= 1 && yDist <= 1 && xDist + yDist < 2)
                 {
                     X = xCoord;
                     Y = yCoord;
