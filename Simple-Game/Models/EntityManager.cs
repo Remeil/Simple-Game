@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 
@@ -12,6 +13,15 @@ namespace SimpleGame.Models
         }
 
         public ICollection<BaseEntity> Entities { get; set; }
+
+        public void Debug()
+        {
+            foreach (var entity in Entities.OrderBy(x => x.Timer))
+            {
+                Console.WriteLine("Entity Name: " + entity.Name + " Timer: " + entity.Timer);
+            }
+            Console.WriteLine();
+        }
 
         public BaseEntity GetNextEntity()
         {

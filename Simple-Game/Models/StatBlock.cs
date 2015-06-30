@@ -2,6 +2,26 @@
 {
     public class StatBlock
     {
+        public StatBlock()
+        {
+            CurrentHp = MaxHp;
+            CurrentMp = MaxMp;
+        }
+
+        public StatBlock(decimal baseHp, decimal baseMp, int baseAttackPower, int baseDefensePower, int baseDodge, int baseAccuracy, int baseSpeed, int baseMagic)
+        {
+            BaseHp = baseHp;
+            CurrentHp = MaxHp;
+            BaseMp = baseMp;
+            CurrentMp = MaxMp;
+            BaseAttackPower = baseAttackPower;
+            BaseDefensePower = baseDefensePower;
+            BaseDodge = baseDodge;
+            BaseAccuracy = baseAccuracy;
+            BaseSpeed = baseSpeed;
+            BaseMagic = baseMagic;
+        }
+
         public decimal MaxHp{ get { return (BaseHp + HpMod) * (decimal)3.2 + 25; } }
         public decimal BaseHp { get; set; }
         public int HpMod { get; set; }

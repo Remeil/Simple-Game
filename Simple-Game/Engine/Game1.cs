@@ -63,7 +63,12 @@ namespace SimpleGame.Engine
                 X = startingLoc.X,
                 Y = startingLoc.Y,
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Player.png")
+                Sprite = Content.Load<Texture2D>("Player.png"),
+                WeaponDamage = 10,
+                ArmorBlock = 4,
+                Stats = new StatBlock(),
+                Timer = 0,
+                Name = "Player"
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
@@ -72,8 +77,16 @@ namespace SimpleGame.Engine
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Enemy.png")
+                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                WeaponDamage = 8,
+                ArmorBlock = 2,
+                Stats = new StatBlock(),
+                Timer = 5000,
+                Name = "Big Bad"
             };
+
+            _entityManager.Entities.Add(_player);
+            _entityManager.Entities.Add(_enemy);
 
             //Set starting FOV
             UpdatePlayerFieldOfView();
@@ -102,10 +115,23 @@ namespace SimpleGame.Engine
 
             _inputState.Update();
 
-            if (_player.HandleInput(_inputState, _map))
+            var nextEntity = _entityManager.GetNextEntity();
+            if (nextEntity == _player)
             {
-                UpdatePlayerFieldOfView();
+                if (_player.HandleInput(_inputState, _map))
+                {
+                    UpdatePlayerFieldOfView();
+                    nextEntity.Timer += 800;
+                    _entityManager.UpdateTimers();
+                    _entityManager.Debug();
+                }
+            }
+            else if (nextEntity == _enemy)
+            {
                 _enemy.ChasePlayer(_player, _map);
+                nextEntity.Timer += 1000;
+                _entityManager.UpdateTimers();
+                _entityManager.Debug();
             }
             
             base.Update(gameTime);
