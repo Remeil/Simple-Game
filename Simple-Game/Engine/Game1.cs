@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using SimpleGame.Entities;
+using SimpleGame.Models;
 
 namespace SimpleGame.Engine
 {
@@ -18,6 +19,7 @@ namespace SimpleGame.Engine
         private IMap _map;
         private Player _player;
         private Enemy _enemy;
+        private EntityManager _entityManager;
 
         public Game1()
         {
@@ -37,6 +39,7 @@ namespace SimpleGame.Engine
             IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
+            _entityManager = new EntityManager();
 
             base.Initialize();
         }

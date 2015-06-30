@@ -1,6 +1,5 @@
 ﻿using System;
 using RogueSharp.Random;
-using SimpleGame.Entities;
 using SimpleGame.Enumerators;
 using SimpleGame.Models;
 

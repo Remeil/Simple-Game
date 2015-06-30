@@ -1,4 +1,4 @@
-﻿namespace SimpleGame.Entities
+﻿namespace SimpleGame.Models
 {
     class Inventory
     {

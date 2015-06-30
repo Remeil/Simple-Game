@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using RogueSharp;
-using SimpleGame.Entities;
+using SimpleGame.Models;
 
 namespace SimpleGameTests.EngineTests
 {

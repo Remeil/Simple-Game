@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 
-namespace SimpleGame.Entities
+namespace SimpleGame.Models
 {
     public class Enemy : BaseEntity
     {

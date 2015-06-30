@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using RogueSharp.Random;
 using SimpleGame.Engine;
-using SimpleGame.Entities;
 using SimpleGame.Enumerators;
 using SimpleGame.Models;
 

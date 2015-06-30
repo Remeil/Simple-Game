@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
-using SimpleGame.Entities;
 
 namespace SimpleGame.Models
 {
     public class EntityManager
     {
+        public EntityManager()
+        {
+            Entities = new HashSet<BaseEntity>();
+        }
+
         public ICollection<BaseEntity> Entities { get; set; }
 
         public BaseEntity GetNextEntity()

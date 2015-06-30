@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
 
-namespace SimpleGame.Entities
+namespace SimpleGame.Models
 {
     public class Player : BaseEntity
     {

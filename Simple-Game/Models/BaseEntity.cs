@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using SimpleGame.Models;
 
-namespace SimpleGame.Entities
+namespace SimpleGame.Models
 {
     public class BaseEntity
     {
