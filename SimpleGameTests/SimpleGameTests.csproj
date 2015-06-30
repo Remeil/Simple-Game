@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="EngineTests\CombatTests.cs" />
     <Compile Include="EngineTests\MapTests.cs" />
+    <Compile Include="EntityManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

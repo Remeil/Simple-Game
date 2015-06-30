@@ -17,6 +17,7 @@ namespace SimpleGame.Entities
         public StatBlock Stats { get; set; }
         public decimal WeaponDamage { get; set; }
         public decimal ArmorBlock { get; set; }
+        public int Timer { get; set; }
 
         public bool IsAlive
         {
