@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RogueSharp;
 using SimpleGame.Entities;
 
@@ -19,17 +14,14 @@ namespace SimpleGameTests.EngineTests
         public void Init()
         {
             Map = new BorderOnlyMapCreationStrategy<Map>(5, 5).CreateMap();
-            Entity = new BaseEntity
-            {
-                X = 3,
-                Y = 3
-            };
+            Entity = new BaseEntity();
         }
 
         [SetUp]
         public void Setup()
         {
-            
+            Entity.X = 3;
+            Entity.Y = 3;
         }
 
         [TestCase(2, 2, ExpectedResult = false)]
