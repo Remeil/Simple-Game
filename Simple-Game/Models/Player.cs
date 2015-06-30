@@ -35,35 +35,19 @@ namespace SimpleGame.Entities
         {
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                if (map.IsWalkable(X-1, Y))
-                {
-                    X--;
-                    return true;
-                }
+                return Move(X - 1, Y, map);
             }
             else if (inputState.IsRight(null))
             {
-                if (map.IsWalkable(X + 1, Y))
-                {
-                    X++;
-                    return true;
-                }
+                return Move(X + 1, Y, map);
             }
             else if (inputState.IsUp(null))
             {
-                if (map.IsWalkable(X, Y - 1))
-                {
-                    Y--;
-                    return true;
-                }
+                return Move(X, Y - 1, map);
             }
             else if (inputState.IsDown(null))
             {
-                if (map.IsWalkable(X, Y + 1))
-                {
-                    Y++;
-                    return true;
-                }
+                return Move(X, Y + 1, map);
             }
             return false;
         }

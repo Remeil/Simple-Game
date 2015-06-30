@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Models;
@@ -27,6 +28,20 @@ namespace SimpleGame.Entities
         {
             Stats.CurrentHp -= damage;
             Console.WriteLine(name + " has dealt " + damage + " damage to " + Name);
+        }
+
+        public virtual bool Move(int xCoord, int yCoord, IMap map)
+        {
+            if (map.IsWalkable(xCoord, yCoord))
+            {
+                if (Math.Abs(xCoord - X) <= 1 && Math.Abs(yCoord - Y) <= 1)
+                {
+                    X = xCoord;
+                    Y = yCoord;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

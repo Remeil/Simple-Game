@@ -40,8 +40,7 @@ namespace SimpleGame.Entities
             {
                 return;
             }
-            X = nextSquare.X;
-            Y = nextSquare.Y;
+            Move(nextSquare.X, nextSquare.Y, map);
         }
 
         public bool IsVisible(IMap map)
