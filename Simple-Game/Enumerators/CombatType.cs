@@ -1,4 +1,4 @@
-﻿namespace SimpleGame.Models
+﻿namespace SimpleGame.Enumerators
 {
     public enum CombatType
     {
