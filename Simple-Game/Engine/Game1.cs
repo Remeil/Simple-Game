@@ -128,7 +128,7 @@ namespace SimpleGame.Engine
             }
             else if (nextEntity == _enemy)
             {
-                _enemy.ChasePlayer(_player, _map);
+                _enemy.HandleTurn(_player, _map);
                 nextEntity.Timer += 1000;
                 _entityManager.UpdateTimers();
                 _entityManager.Debug();

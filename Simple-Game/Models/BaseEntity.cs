@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Enumerators;
 
 namespace SimpleGame.Models
 {
@@ -17,6 +18,7 @@ namespace SimpleGame.Models
         public decimal WeaponDamage { get; set; }
         public decimal ArmorBlock { get; set; }
         public int Timer { get; set; }
+        public EntityTeam EntityTeam { get; set; }
 
         public bool IsAlive
         {

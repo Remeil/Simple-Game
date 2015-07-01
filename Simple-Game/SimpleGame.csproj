@@ -53,6 +53,7 @@
     <Compile Include="Engine\CombatMethods.cs" />
     <Compile Include="Engine\InputState.cs" />
     <Compile Include="Engine\MapMethods.cs" />
+    <Compile Include="Enumerators\EntityTeam.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Enumerators\CombatType.cs" />
     <Compile Include="Models\Enemy.cs" />

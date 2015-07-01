@@ -18,6 +18,11 @@ namespace SimpleGame.Models
             PathFinder = new PathFinder(map);
         }
 
+        public void HandleTurn(Player player, IMap map)
+        {
+            ChasePlayer(player, map);
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
@@ -33,7 +38,7 @@ namespace SimpleGame.Models
             Y = nextSquare.Y;
         }
 
-        public void ChasePlayer(Player player, IMap map)
+        private void ChasePlayer(Player player, IMap map)
         {
             var nextSquare = PathFinder.ShortestPath(map.GetCell(X, Y), map.GetCell(player.X, player.Y)).FirstOrDefault();
             if (nextSquare == null)
