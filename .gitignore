@@ -18,6 +18,13 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+#Include binaries for Tim
+![Bb]in/
+![Dd]ebug/
+![Bb]in/Debug/**
+!*.exe
+!*.dll
+
 # Roslyn cache directories
 *.ide/
 
