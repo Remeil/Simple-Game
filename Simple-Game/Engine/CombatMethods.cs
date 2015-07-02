@@ -14,6 +14,18 @@ namespace SimpleGame.Engine
             Random = new DotNetRandom();
         }
 
+        public static void MakeMeleeAttack(this BaseEntity attacker, BaseEntity defender)
+        {
+            if (attacker.TryToHit(defender, CombatType.Melee))
+            {
+                defender.TakeDamage(attacker.CalculateDamageOn(defender), attacker.Name);
+            }
+            else
+            {
+                Console.WriteLine(attacker.Name + " missed an attack on " + defender.Name);
+            }
+        }
+
         public static decimal CalculateDamageOn(this BaseEntity attacker, BaseEntity defender)
         {
             var randomModifier = Random.Next(80, 120);

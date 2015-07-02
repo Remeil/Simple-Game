@@ -18,9 +18,9 @@ namespace SimpleGame.Models
             PathFinder = new PathFinder(map);
         }
 
-        public void HandleTurn(Player player, IMap map)
+        public void HandleTurn(Player player, IMap map, EntityManager entities)
         {
-            ChasePlayer(player, map);
+            ChasePlayer(player, map, entities);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -38,14 +38,14 @@ namespace SimpleGame.Models
             Y = nextSquare.Y;
         }
 
-        private void ChasePlayer(Player player, IMap map)
+        private void ChasePlayer(Player player, IMap map, EntityManager entities)
         {
             var nextSquare = PathFinder.ShortestPath(map.GetCell(X, Y), map.GetCell(player.X, player.Y)).FirstOrDefault();
             if (nextSquare == null)
             {
                 return;
             }
-            Move(nextSquare.X, nextSquare.Y, map);
+            MoveOrAttack(map, entities, nextSquare.X, nextSquare.Y);
         }
 
         public bool IsVisible(IMap map)

@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
+using SimpleGame.Enumerators;
 
 namespace SimpleGame.Models
 {
@@ -10,7 +12,7 @@ namespace SimpleGame.Models
 
         public Player()
         {
-            
+
         }
 
         public Player(IMap map)
@@ -26,31 +28,30 @@ namespace SimpleGame.Models
               Color.White, SpriteEffects.None, 0.5f);
         }
 
-        public bool HandleInput(InputState inputState)
+        public bool HandleInput(InputState inputState, EntityManager entities)
         {
-            return HandleInput(inputState, Map);
+            return HandleInput(inputState, Map, entities);
         }
 
-        public bool HandleInput(InputState inputState, IMap map)
+        public bool HandleInput(InputState inputState, IMap map, EntityManager entities)
         {
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                return Move(X - 1, Y, map);
+                return MoveOrAttack(map, entities, X - 1, Y);
             }
             else if (inputState.IsRight(null))
             {
-                return Move(X + 1, Y, map);
+                return MoveOrAttack(map, entities, X + 1, Y);
             }
             else if (inputState.IsUp(null))
             {
-                return Move(X, Y - 1, map);
+                return MoveOrAttack(map, entities, X, Y - 1);
             }
             else if (inputState.IsDown(null))
             {
-                return Move(X, Y + 1, map);
+                return MoveOrAttack(map, entities, X, Y + 1);
             }
             return false;
         }
-
     }
 }

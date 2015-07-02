@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Engine;
 using SimpleGame.Enumerators;
 
 namespace SimpleGame.Models
@@ -45,6 +46,20 @@ namespace SimpleGame.Models
                 }
             }
             return false;
+        }
+
+        protected bool MoveOrAttack(IMap map, EntityManager entities, int x, int y)
+        {
+            var otherEntity = entities.GetEntityInSquare(x, y);
+            if (otherEntity != null)
+            {
+                this.MakeMeleeAttack(otherEntity);
+                return true;
+            }
+            else
+            {
+                return Move(x, y, map);
+            }
         }
     }
 }
