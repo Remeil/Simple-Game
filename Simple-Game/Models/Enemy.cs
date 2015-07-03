@@ -23,14 +23,6 @@ namespace SimpleGame.Models
             ChasePlayer(player, map, entities);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
-              null, null, null, 0.0f, new Vector2(Scale, Scale),
-              Color.White, SpriteEffects.None, 0.4f);
-        }
-
         public void GoToPoint(int destX, int destY)
         {
             var nextSquare = PathFinder.ShortestPath(Map.GetCell(X, Y), Map.GetCell(destX, destY)).First();
@@ -46,11 +38,6 @@ namespace SimpleGame.Models
                 return;
             }
             MoveOrAttack(map, entities, nextSquare.X, nextSquare.Y);
-        }
-
-        public bool IsVisible(IMap map)
-        {
-            return map.IsInFov(X, Y);
         }
     }
 }

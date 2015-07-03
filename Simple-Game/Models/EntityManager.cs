@@ -38,5 +38,11 @@ namespace SimpleGame.Models
             var minimumTimerValue = Entities.Min(entity => entity.Timer);
             Entities.ForEach(entity => entity.Timer -= minimumTimerValue);
         }
+
+        public void RemoveEntity(BaseEntity entity)
+        {
+            Entities.Remove(entity);
+        }
+
     }
 }

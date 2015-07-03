@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -116,6 +117,11 @@ namespace SimpleGame.Engine
             _inputState.Update();
 
             var nextEntity = _entityManager.GetNextEntity();
+            if (!nextEntity.IsAlive)
+            {
+                _entityManager.RemoveEntity(nextEntity);
+            }
+
             if (nextEntity == _player)
             {
                 if (_player.HandleInput(_inputState, _map, _entityManager))
@@ -186,12 +192,21 @@ namespace SimpleGame.Engine
                 }
             }
 
-            //draw the player sprite
-            _player.Draw(spriteBatch);
-
-            if (_enemy.IsVisible(_map))
+            //Draw all the sprites
+            foreach (var entity in _entityManager.Entities)
             {
-                _enemy.Draw(spriteBatch);
+                if (entity.IsVisible(_map) && entity.IsAlive)
+                {
+                    entity.Draw(spriteBatch);
+                }
+                else
+                {
+                    if (entity is Player)
+                    {
+                        Console.WriteLine("GG RITO");
+                        return;
+                    }
+                }
             }
 
             spriteBatch.End();

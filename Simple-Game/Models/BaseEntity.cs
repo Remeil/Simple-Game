@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
@@ -60,6 +61,19 @@ namespace SimpleGame.Models
             {
                 return Move(x, y, map);
             }
+        }
+
+        public bool IsVisible(IMap map)
+        {
+            return map.IsInFov(X, Y);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            float multiplier = Scale * Sprite.Width;
+            spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
+              null, null, null, 0.0f, new Vector2(Scale, Scale),
+              Color.White, SpriteEffects.None, 0.4f);
         }
     }
 }
