@@ -18,9 +18,8 @@ namespace SimpleGame.Engine
         private Texture2D _wall;
         private Texture2D _floor;
         private IMap _map;
-        private Player _player;
-        private Enemy _enemy;
         private EntityManager _entityManager;
+        private Player _player;
 
         public Game1()
         {
@@ -73,7 +72,7 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            _enemy = new Enemy (_map)
+            var enemy = new Enemy (_map)
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
@@ -87,7 +86,7 @@ namespace SimpleGame.Engine
             };
 
             _entityManager.Entities.Add(_player);
-            _entityManager.Entities.Add(_enemy);
+            _entityManager.Entities.Add(enemy);
 
             //Set starting FOV
             UpdatePlayerFieldOfView();
@@ -122,24 +121,31 @@ namespace SimpleGame.Engine
                 _entityManager.RemoveEntity(nextEntity);
             }
 
-            if (nextEntity == _player)
+            var player = nextEntity as Player;
+            if (player != null)
             {
-                if (_player.HandleInput(_inputState, _map, _entityManager))
+                var entity = player;
+                if (entity.HandleInput(_inputState, _map, _entityManager))
                 {
                     UpdatePlayerFieldOfView();
-                    nextEntity.Timer += 800;
+                    player.Timer += 800;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }
             }
-            else if (nextEntity == _enemy)
+            else
             {
-                _enemy.HandleTurn(_player, _map, _entityManager);
-                nextEntity.Timer += 1000;
-                _entityManager.UpdateTimers();
-                _entityManager.Debug();
+                var enemy = nextEntity as Enemy;
+                if (enemy != null)
+                {
+                    var entity = enemy;
+                    entity.HandleTurn(_player, _map, _entityManager);
+                    enemy.Timer += 1000;
+                    _entityManager.UpdateTimers();
+                    _entityManager.Debug();
+                }
             }
-            
+
             base.Update(gameTime);
         }
 
@@ -204,7 +210,7 @@ namespace SimpleGame.Engine
                     if (entity is Player)
                     {
                         Console.WriteLine("GG RITO");
-                        return;
+                        Exit();
                     }
                 }
             }
