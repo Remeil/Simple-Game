@@ -13,7 +13,7 @@ namespace SimpleGame.Engine
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
         private InputState _inputState;
         private Texture2D _wall;
         private Texture2D _floor;
@@ -51,7 +51,7 @@ namespace SimpleGame.Engine
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             _wall = this.Content.Load<Texture2D>("Wall.png");
@@ -158,7 +158,7 @@ namespace SimpleGame.Engine
             GraphicsDevice.Clear(Color.TransparentBlack);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
@@ -184,7 +184,7 @@ namespace SimpleGame.Engine
                 //floor tile
                 if (cell.IsWalkable)
                 {
-                    spriteBatch.Draw(_floor, position,
+                    _spriteBatch.Draw(_floor, position,
                       null, null, null, 0.0f, new Vector2(scale, scale),
                       tint, SpriteEffects.None, 0.8f);
                 }
@@ -192,7 +192,7 @@ namespace SimpleGame.Engine
                 //wall
                 else
                 {
-                    spriteBatch.Draw(_wall, position,
+                    _spriteBatch.Draw(_wall, position,
                        null, null, null, 0.0f, new Vector2(scale, scale),
                        tint, SpriteEffects.None, 0.8f);
                 }
@@ -203,7 +203,7 @@ namespace SimpleGame.Engine
             {
                 if (entity.IsVisible(_map) && entity.IsAlive)
                 {
-                    entity.Draw(spriteBatch);
+                    entity.Draw(_spriteBatch);
                 }
                 else
                 {
@@ -215,7 +215,7 @@ namespace SimpleGame.Engine
                 }
             }
 
-            spriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

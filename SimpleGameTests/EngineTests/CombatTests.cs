@@ -287,5 +287,27 @@ namespace SimpleGameTests.EngineTests
             //Assert
             return actual;
         }
+
+        [TestCase(EntityTeam.Player, EntityTeam.Enemy, ExpectedResult = false)]
+        [TestCase(EntityTeam.Enemy, EntityTeam.Enemy, ExpectedResult = true)]
+        [TestCase(EntityTeam.Enemy, EntityTeam.EnemyHostileTowardOthers, ExpectedResult = false)]
+        [TestCase(EntityTeam.EnemyHostileTowardOthers, EntityTeam.EnemyHostileTowardOthers, ExpectedResult = false)]
+        [TestCase(EntityTeam.Player, EntityTeam.NeutralCantBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.Player, EntityTeam.NeutralCanBeHit, ExpectedResult = false)]
+        [TestCase(EntityTeam.NeutralCanBeHit, EntityTeam.NeutralCanBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.NeutralCantBeHit, EntityTeam.NeutralCanBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.NeutralCanBeHit, EntityTeam.NeutralCantBeHit, ExpectedResult = true)]
+        public bool OnFriendlyTeam_VariousTeams_DeterminesFriendlinessCorrectly(EntityTeam team1, EntityTeam team2)
+        {
+            //Arrange
+            DamageDealer.EntityTeam = team1;
+            DamageTaker.EntityTeam = team2;
+
+            //Act
+            var actual = DamageDealer.OnFriendlyTeam(DamageTaker);
+
+            //Assert
+            return actual;
+        }
     }
 }
