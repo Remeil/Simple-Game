@@ -307,7 +307,7 @@ namespace SimpleGameTests.EngineTests
             var actual = DamageDealer.OnFriendlyTeam(DamageTaker);
 
             //Assert
-            return actual; 
+            return actual;
         }
     }
 }
