@@ -199,6 +199,7 @@ namespace SimpleGame.Engine
             }
 
             var entitiesToAdd = new List<BaseEntity>();
+            var entitiesToRemove = new List<BaseEntity>();
             //Draw all the sprites
             foreach (var entity in _entityManager.Entities)
             {
@@ -221,6 +222,7 @@ namespace SimpleGame.Engine
                             Timer = 50000,
                             Name = "Big Bad"
                         });
+                    entitiesToRemove.Add(entity);
                 }
                 else
                 {
@@ -235,7 +237,15 @@ namespace SimpleGame.Engine
             foreach (var entity in entitiesToAdd)
             {
                 _entityManager.Entities.Add(entity);
-                entity.Draw(_spriteBatch);
+                if (entity.IsVisible(_map))
+                {
+                    entity.Draw(_spriteBatch);
+                }
+            }
+
+            foreach (var entity in entitiesToRemove)
+            {
+                _entityManager.RemoveEntity(entity);
             }
 
             _spriteBatch.End();
