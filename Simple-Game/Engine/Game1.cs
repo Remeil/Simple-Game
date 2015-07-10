@@ -72,7 +72,7 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            var enemy = new Enemy (_map)
+            var enemy = new Enemy(_map)
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
@@ -198,12 +198,29 @@ namespace SimpleGame.Engine
                 }
             }
 
+            var entitiesToAdd = new List<BaseEntity>();
             //Draw all the sprites
             foreach (var entity in _entityManager.Entities)
             {
                 if (entity.IsVisible(_map) && entity.IsAlive)
                 {
                     entity.Draw(_spriteBatch);
+                }
+                else if (!entity.IsAlive && entity is Enemy)
+                {
+                    var startingLoc = _map.GetRandomWalkableCell();
+                    entitiesToAdd.Add(new Enemy(_map)
+                        {
+                            X = startingLoc.X,
+                            Y = startingLoc.Y,
+                            Scale = 0.5f,
+                            Sprite = Content.Load<Texture2D>("Enemy.png"),
+                            WeaponDamage = 8,
+                            ArmorBlock = 2,
+                            Stats = new StatBlock(),
+                            Timer = 50000,
+                            Name = "Big Bad"
+                        });
                 }
                 else
                 {
@@ -213,6 +230,12 @@ namespace SimpleGame.Engine
                         Exit();
                     }
                 }
+            }
+
+            foreach (var entity in entitiesToAdd)
+            {
+                _entityManager.Entities.Add(entity);
+                entity.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
