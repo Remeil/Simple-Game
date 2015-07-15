@@ -1,8 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using RogueSharp.Random;
-using SimpleGame.Entities;
+using SimpleGame.Models;
 
 namespace SimpleGame.Engine
 {
@@ -12,13 +13,13 @@ namespace SimpleGame.Engine
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
         private InputState _inputState;
         private Texture2D _wall;
         private Texture2D _floor;
         private IMap _map;
+        private EntityManager _entityManager;
         private Player _player;
-        private Enemy _enemy;
 
         public Game1()
         {
@@ -38,6 +39,7 @@ namespace SimpleGame.Engine
             IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
+            _entityManager = new EntityManager();
 
             base.Initialize();
         }
@@ -49,7 +51,7 @@ namespace SimpleGame.Engine
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             _wall = this.Content.Load<Texture2D>("Wall.png");
@@ -61,17 +63,30 @@ namespace SimpleGame.Engine
                 X = startingLoc.X,
                 Y = startingLoc.Y,
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Player.png")
+                Sprite = Content.Load<Texture2D>("Player.png"),
+                WeaponDamage = 10,
+                ArmorBlock = 4,
+                Stats = new StatBlock(),
+                Timer = 0,
+                Name = "Player"
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            _enemy = new Enemy (_map)
+            var enemy = new Enemy(_map)
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Enemy.png")
+                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                WeaponDamage = 8,
+                ArmorBlock = 2,
+                Stats = new StatBlock(),
+                Timer = 5000,
+                Name = "Big Bad"
             };
+
+            _entityManager.Entities.Add(_player);
+            _entityManager.Entities.Add(enemy);
 
             //Set starting FOV
             UpdatePlayerFieldOfView();
@@ -100,12 +115,37 @@ namespace SimpleGame.Engine
 
             _inputState.Update();
 
-            if (_player.HandleInput(_inputState, _map))
+            var nextEntity = _entityManager.GetNextEntity();
+            if (!nextEntity.IsAlive)
             {
-                UpdatePlayerFieldOfView();
-                _enemy.ChasePlayer(_player, _map);
+                _entityManager.RemoveEntity(nextEntity);
             }
-            
+
+            var player = nextEntity as Player;
+            if (player != null)
+            {
+                var entity = player;
+                if (entity.HandleInput(_inputState, _map, _entityManager))
+                {
+                    UpdatePlayerFieldOfView();
+                    player.Timer += 800;
+                    _entityManager.UpdateTimers();
+                    _entityManager.Debug();
+                }
+            }
+            else
+            {
+                var enemy = nextEntity as Enemy;
+                if (enemy != null)
+                {
+                    var entity = enemy;
+                    entity.HandleTurn(_player, _map, _entityManager);
+                    enemy.Timer += 1000;
+                    _entityManager.UpdateTimers();
+                    _entityManager.Debug();
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -118,7 +158,7 @@ namespace SimpleGame.Engine
             GraphicsDevice.Clear(Color.TransparentBlack);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
@@ -144,7 +184,7 @@ namespace SimpleGame.Engine
                 //floor tile
                 if (cell.IsWalkable)
                 {
-                    spriteBatch.Draw(_floor, position,
+                    _spriteBatch.Draw(_floor, position,
                       null, null, null, 0.0f, new Vector2(scale, scale),
                       tint, SpriteEffects.None, 0.8f);
                 }
@@ -152,21 +192,63 @@ namespace SimpleGame.Engine
                 //wall
                 else
                 {
-                    spriteBatch.Draw(_wall, position,
+                    _spriteBatch.Draw(_wall, position,
                        null, null, null, 0.0f, new Vector2(scale, scale),
                        tint, SpriteEffects.None, 0.8f);
                 }
             }
 
-            //draw the player sprite
-            _player.Draw(spriteBatch);
-
-            if (_enemy.IsVisible(_map))
+            var entitiesToAdd = new List<BaseEntity>();
+            var entitiesToRemove = new List<BaseEntity>();
+            //Draw all the sprites
+            foreach (var entity in _entityManager.Entities)
             {
-                _enemy.Draw(spriteBatch);
+                if (entity.IsVisible(_map) && entity.IsAlive)
+                {
+                    entity.Draw(_spriteBatch);
+                }
+                else if (!entity.IsAlive && entity is Enemy)
+                {
+                    var startingLoc = _map.GetRandomWalkableCell();
+                    entitiesToAdd.Add(new Enemy(_map)
+                        {
+                            X = startingLoc.X,
+                            Y = startingLoc.Y,
+                            Scale = 0.5f,
+                            Sprite = Content.Load<Texture2D>("Enemy.png"),
+                            WeaponDamage = 8,
+                            ArmorBlock = 2,
+                            Stats = new StatBlock(),
+                            Timer = 50000,
+                            Name = "Big Bad"
+                        });
+                    entitiesToRemove.Add(entity);
+                }
+                else
+                {
+                    if (entity is Player)
+                    {
+                        Console.WriteLine("GG RITO");
+                        Exit();
+                    }
+                }
             }
 
-            spriteBatch.End();
+            foreach (var entity in entitiesToAdd)
+            {
+                _entityManager.Entities.Add(entity);
+                if (entity.IsVisible(_map))
+                {
+                    entity.Draw(_spriteBatch);
+                }
+            }
+
+            foreach (var entity in entitiesToRemove)
+            {
+                _entityManager.RemoveEntity(entity);
+            }
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

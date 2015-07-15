@@ -6,7 +6,12 @@ namespace SimpleGame.Engine
 {
     public static class MapExtensions
     {
-        private static readonly IRandom Random = new DotNetRandom();
+        private static IRandom Random { get; set; }
+
+        static MapExtensions()
+        {
+            Random = new DotNetRandom();
+        }
 
         public static Cell GetRandomWalkableCell(this IMap map)
         {
@@ -17,8 +22,8 @@ namespace SimpleGame.Engine
             }
             while (true)
             {
-                int x = Random.Next(map.Width);
-                int y = Random.Next(map.Height);
+                int x = Random.Next(map.Width - 1);
+                int y = Random.Next(map.Height - 1);
                 if (map.IsWalkable(x, y))
                 {
                     return map.GetCell(x, y);

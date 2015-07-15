@@ -1,16 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
+using SimpleGame.Enumerators;
 
-namespace SimpleGame.Entities
+namespace SimpleGame.Models
 {
     public class Player : BaseEntity
     {
 
         public Player()
         {
-            
+
         }
 
         public Player(IMap map)
@@ -26,47 +28,30 @@ namespace SimpleGame.Entities
               Color.White, SpriteEffects.None, 0.5f);
         }
 
-        public bool HandleInput(InputState inputState)
+        public bool HandleInput(InputState inputState, EntityManager entities)
         {
-            return HandleInput(inputState, Map);
+            return HandleInput(inputState, Map, entities);
         }
 
-        public bool HandleInput(InputState inputState, IMap map)
+        public bool HandleInput(InputState inputState, IMap map, EntityManager entities)
         {
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                if (map.IsWalkable(X-1, Y))
-                {
-                    X--;
-                    return true;
-                }
+                return MoveOrAttack(map, entities, X - 1, Y);
             }
             else if (inputState.IsRight(null))
             {
-                if (map.IsWalkable(X + 1, Y))
-                {
-                    X++;
-                    return true;
-                }
+                return MoveOrAttack(map, entities, X + 1, Y);
             }
             else if (inputState.IsUp(null))
             {
-                if (map.IsWalkable(X, Y - 1))
-                {
-                    Y--;
-                    return true;
-                }
+                return MoveOrAttack(map, entities, X, Y - 1);
             }
             else if (inputState.IsDown(null))
             {
-                if (map.IsWalkable(X, Y + 1))
-                {
-                    Y++;
-                    return true;
-                }
+                return MoveOrAttack(map, entities, X, Y + 1);
             }
             return false;
         }
-
     }
 }

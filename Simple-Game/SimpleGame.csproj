@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>packages\morelinq.1.1.1\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="RogueSharp, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\RogueSharp.2.0.0.0\lib\portable-net40+sl50+win+wpa81+wp80\RogueSharp.dll</HintPath>
@@ -47,13 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\CombatMethods.cs" />
     <Compile Include="Engine\InputState.cs" />
     <Compile Include="Engine\MapMethods.cs" />
-    <Compile Include="Entities\BaseEntity.cs" />
-    <Compile Include="Entities\Enemy.cs" />
-    <Compile Include="Entities\Player.cs" />
+    <Compile Include="Enumerators\EntityTeam.cs" />
+    <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Enumerators\CombatType.cs" />
+    <Compile Include="Models\Enemy.cs" />
+    <Compile Include="Models\EntityManager.cs" />
+    <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Engine\Game1.cs" />
     <Compile Include="Engine\Main.cs" />
+    <Compile Include="Models\StatBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,7 @@
     <Content Include="Content\player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\RedX.png" />
     <Content Include="Content\wall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
