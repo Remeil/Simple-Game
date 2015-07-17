@@ -40,7 +40,7 @@ namespace SimpleGameTests
 
             //Assert
             Assert.AreSame(expected, actual);
-        }
+        } 
 
         [Test]
         public void UpdateTimers_UpdatesEntitiesTimers()
