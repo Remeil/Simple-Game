@@ -13,4 +13,4 @@ notifications:
     rooms:
       secure: "V0onDSslRdTc3ST/4jC1f3YxG885SDJN4x+NLygaVshbp89JBQGhyMst3eDmKhvFDQu3rn8JEFw5SlcNnkKoKVYNjybpaIJv548k0trIDFkjG4t/Q9Rjulu5sIcR7zxkYc4li8P4K2ytpyrcRXflgS5kF6uAtzo2teotiXRjyUs="
     template:
-      - '%{repository}#%{build_number} (%{branch} - %{commit_subject} : %{author}): %{message}'
+      - 'Simple Game#%{build_number} (%{branch} - %{commit_subject}): %{message}'
