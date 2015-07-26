@@ -187,4 +187,3 @@ FakesAssemblies/
 
 #UserInterface project gitignore
 !UserInterface/lib/*
- 
