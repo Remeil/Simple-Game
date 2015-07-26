@@ -95,9 +95,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Simple-Game\SimpleGame.csproj">
       <Project>{6fa2a214-9cb2-425e-87db-82444fa76013}</Project>
       <Name>SimpleGame</Name>
