@@ -57,10 +57,10 @@ namespace SimpleGame.Engine
             _nativeScreenHeight = graphics.PreferredBackBufferHeight;
 
             // Or any other resolution
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferMultiSampling = true;
-            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+            //graphics.PreferredBackBufferWidth = 1280;
+            //graphics.PreferredBackBufferHeight = 720;
+            //graphics.PreferMultiSampling = true;
+            //graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
 
         void GraphicsDeviceCreated(object sender, EventArgs e)
