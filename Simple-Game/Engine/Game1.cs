@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using EmptyKeys.UserInterface;
+using EmptyKeys.UserInterface.Generated;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
@@ -20,11 +22,16 @@ namespace SimpleGame.Engine
         private IMap _map;
         private EntityManager _entityManager;
         private Player _player;
+        private UserInterface _userInterface;
+        private int _nativeScreenWidth;
+        private int _nativeScreenHeight;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreparingDeviceSettings += GraphicsPreparingDeviceSettings;
+            graphics.DeviceCreated += GraphicsDeviceCreated;
         }
 
         /// <summary>
@@ -44,6 +51,23 @@ namespace SimpleGame.Engine
             base.Initialize();
         }
 
+        void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            _nativeScreenWidth = graphics.PreferredBackBufferWidth;
+            _nativeScreenHeight = graphics.PreferredBackBufferHeight;
+
+            // Or any other resolution
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferMultiSampling = true;
+            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+        }
+
+        void GraphicsDeviceCreated(object sender, EventArgs e)
+        {
+            EmptyKeys.UserInterface.Engine engine = new MonoGameEngine(GraphicsDevice, _nativeScreenWidth, _nativeScreenHeight);
+        }
+
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -53,9 +77,14 @@ namespace SimpleGame.Engine
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Create the user interface
+            var font = Content.Load<SpriteFont>("UI/Segoe_UI_9_Regular");
+            FontManager.DefaultFont = EmptyKeys.UserInterface.Engine.Instance.Renderer.CreateFont(font);
+            _userInterface = new UserInterface(_nativeScreenWidth, _nativeScreenHeight);
+
             // TODO: use this.Content to load your game content here
-            _wall = this.Content.Load<Texture2D>("Wall.png");
-            _floor = this.Content.Load<Texture2D>("Floor.png");
+            _wall = Content.Load<Texture2D>("Wall.png");
+            _floor = Content.Load<Texture2D>("Floor.png");
 
             Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
@@ -145,6 +174,10 @@ namespace SimpleGame.Engine
                     _entityManager.Debug();
                 }
             }
+
+            //Update User interface
+            _userInterface.UpdateInput(gameTime.ElapsedGameTime.Milliseconds);
+            _userInterface.UpdateLayout(gameTime.ElapsedGameTime.Milliseconds);
 
             base.Update(gameTime);
         }
@@ -247,6 +280,10 @@ namespace SimpleGame.Engine
             {
                 _entityManager.RemoveEntity(entity);
             }
+
+
+            //Draw UI
+            _userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
 
             _spriteBatch.End();
 

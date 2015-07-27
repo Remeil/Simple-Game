@@ -20,7 +20,7 @@ namespace SimpleGame.Models
             Map = map;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
             spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),

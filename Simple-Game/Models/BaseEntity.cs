@@ -68,7 +68,7 @@ namespace SimpleGame.Models
             return map.IsInFov(X, Y);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
             spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
