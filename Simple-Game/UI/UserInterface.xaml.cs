@@ -27,6 +27,8 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private TextBlock e_1;
         
+        private TextBlock e_2;
+        
         public UserInterface(int width, int height) : 
                 base(width, height) {
             Style style = RootStyle.CreateRootStyle();
@@ -44,8 +46,13 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_1 = new TextBlock();
             this.e_0.Children.Add(this.e_1);
             this.e_1.Name = "e_1";
-            this.e_1.Text = "Hello World";
-            Grid.SetRow(this.e_1, 0);
+            this.e_1.Text = "Current HP:";
+            // e_2 element
+            this.e_2 = new TextBlock();
+            this.e_0.Children.Add(this.e_2);
+            this.e_2.Name = "e_2";
+            this.e_2.Margin = new Thickness(67F, 0F, -67F, 0F);
+            this.e_2.Text = "23";
             FontManager.Instance.AddFont("Segoe UI", 12F, FontStyle.Regular, "Segoe_UI_9_Regular");
         }
     }

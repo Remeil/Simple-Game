@@ -1,13 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Annotations;
 using SimpleGame.Engine;
-using SimpleGame.Enumerators;
 
 namespace SimpleGame.Models
 {
-    public class Player : BaseEntity
+    public class Player : BaseEntity, INotifyPropertyChanged
     {
 
         public Player()
@@ -23,7 +24,7 @@ namespace SimpleGame.Models
         public override void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
+            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.5f);
         }
@@ -52,6 +53,15 @@ namespace SimpleGame.Models
                 return MoveOrAttack(map, entities, X, Y + 1);
             }
             return false;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -71,7 +71,7 @@ namespace SimpleGame.Models
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier, Y * multiplier),
+            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.4f);
         }

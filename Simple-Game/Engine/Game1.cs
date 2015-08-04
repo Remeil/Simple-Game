@@ -43,7 +43,8 @@ namespace SimpleGame.Engine
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
+            //IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
+            IMapCreationStrategy<Map> mapCreationStrategy = new BorderOnlyMapCreationStrategy<Map>(50, 30);
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
             _entityManager = new EntityManager();
@@ -57,10 +58,10 @@ namespace SimpleGame.Engine
             _nativeScreenHeight = graphics.PreferredBackBufferHeight;
 
             // Or any other resolution
-            //graphics.PreferredBackBufferWidth = 1280;
-            //graphics.PreferredBackBufferHeight = 720;
-            //graphics.PreferMultiSampling = true;
-            //graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+            graphics.PreferredBackBufferWidth = _nativeScreenWidth + 32;
+            graphics.PreferredBackBufferHeight = _nativeScreenHeight + 32;
+            graphics.PreferMultiSampling = true;
+            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
 
         void GraphicsDeviceCreated(object sender, EventArgs e)
@@ -193,13 +194,16 @@ namespace SimpleGame.Engine
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
+            //Draw UI
+            _userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
+
             const int sizeOfSprites = 32;
             const float scale = .5f;
             //iterate through each cell
             foreach (Cell cell in _map.GetAllCells())
             {
                 //calulate curr position based on sprite size and scale
-                var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
+                var position = new Vector2(cell.X * sizeOfSprites * scale + 16, cell.Y * sizeOfSprites * scale + 16);
 
                 //not currently visible to player
                 if (!cell.IsExplored)
@@ -280,10 +284,6 @@ namespace SimpleGame.Engine
             {
                 _entityManager.RemoveEntity(entity);
             }
-
-
-            //Draw UI
-            _userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
 
             _spriteBatch.End();
 

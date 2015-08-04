@@ -87,6 +87,7 @@
     <Compile Include="Engine\Game1.cs" />
     <Compile Include="Engine\Main.cs" />
     <Compile Include="Models\StatBlock.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\UserInterface.xaml.cs" />
   </ItemGroup>
