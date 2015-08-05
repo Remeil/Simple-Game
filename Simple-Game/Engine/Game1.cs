@@ -195,7 +195,7 @@ namespace SimpleGame.Engine
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             //Draw UI
-            _userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
+            _userInterface.DrawUi(gameTime, _player);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;

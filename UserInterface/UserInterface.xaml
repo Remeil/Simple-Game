@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock>Current HP:</TextBlock>
-        <TextBlock Text="{Binding Player.CurrentHp}" Margin="67,0,-67,0">23</TextBlock>
+        <TextBlock Margin="0,0,238,277">Current HP:</TextBlock>
+        <TextBlock x:Name="CurrentHp" Text="{Binding CurrentHp, Mode=OneWay}" Margin="67,0,206,277"></TextBlock>
     </Grid>
 </ek:UIRoot>

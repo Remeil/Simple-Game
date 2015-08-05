@@ -27,7 +27,7 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private TextBlock e_1;
         
-        private TextBlock e_2;
+        private TextBlock CurrentHp;
         
         public UserInterface(int width, int height) : 
                 base(width, height) {
@@ -46,13 +46,16 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_1 = new TextBlock();
             this.e_0.Children.Add(this.e_1);
             this.e_1.Name = "e_1";
+            this.e_1.Margin = new Thickness(0F, 0F, 238F, 277F);
             this.e_1.Text = "Current HP:";
-            // e_2 element
-            this.e_2 = new TextBlock();
-            this.e_0.Children.Add(this.e_2);
-            this.e_2.Name = "e_2";
-            this.e_2.Margin = new Thickness(67F, 0F, -67F, 0F);
-            this.e_2.Text = "23";
+            // CurrentHp element
+            this.CurrentHp = new TextBlock();
+            this.e_0.Children.Add(this.CurrentHp);
+            this.CurrentHp.Name = "CurrentHp";
+            this.CurrentHp.Margin = new Thickness(67F, 0F, 206F, 277F);
+            Binding binding_CurrentHp_Text = new Binding("CurrentHp");
+            binding_CurrentHp_Text.Mode = BindingMode.OneWay;
+            this.CurrentHp.SetBinding(TextBlock.TextProperty, binding_CurrentHp_Text);
             FontManager.Instance.AddFont("Segoe UI", 12F, FontStyle.Regular, "Segoe_UI_9_Regular");
         }
     }
