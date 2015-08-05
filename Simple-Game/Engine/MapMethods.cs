@@ -36,6 +36,7 @@ namespace SimpleGame.Engine
 
         public static void DrawUi(this UserInterface userInterface, GameTime gameTime, BaseEntity entity)
         {
+            userInterface.DataContext = entity.Stats;
             userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
         }
     }
