@@ -14,6 +14,18 @@ namespace SimpleGame.Engine
             Random = new DotNetRandom();
         }
 
+        public static void MakeMeleeAttack(this BaseEntity attacker, BaseEntity defender)
+        {
+            if (attacker.TryToHit(defender, CombatType.Melee))
+            {
+                defender.TakeDamage(attacker.CalculateDamageOn(defender), attacker.Name);
+            }
+            else
+            {
+                Console.WriteLine(attacker.Name + " missed an attack on " + defender.Name);
+            }
+        }
+
         public static decimal CalculateDamageOn(this BaseEntity attacker, BaseEntity defender)
         {
             var randomModifier = Random.Next(80, 120);
@@ -75,6 +87,77 @@ namespace SimpleGame.Engine
             else
             {
                 return true;
+            }
+        }
+
+        public static bool OnFriendlyTeam(this BaseEntity attacker, BaseEntity defender)
+        {
+            switch (attacker.EntityTeam)
+            {
+                case EntityTeam.Player:
+                    switch (defender.EntityTeam)
+                    {
+                        case EntityTeam.Enemy:
+                        case EntityTeam.EnemyHostileTowardOthers:
+                        case EntityTeam.NeutralCanBeHit:
+                            return false;
+
+                        case EntityTeam.Player:
+                        case EntityTeam.NeutralCantBeHit:
+                            return true;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case EntityTeam.Enemy:
+                    switch (defender.EntityTeam)
+                    {
+                        case EntityTeam.Player:
+                        case EntityTeam.EnemyHostileTowardOthers:
+                            return false;
+
+                        case EntityTeam.Enemy:
+                        case EntityTeam.NeutralCanBeHit:
+                        case EntityTeam.NeutralCantBeHit:
+                            return true;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case EntityTeam.NeutralCanBeHit:
+                    switch (defender.EntityTeam)
+                    {
+                        case EntityTeam.EnemyHostileTowardOthers:
+                            return false;
+
+                        case EntityTeam.Enemy:
+                        case EntityTeam.NeutralCanBeHit:
+                        case EntityTeam.NeutralCantBeHit:
+                        case EntityTeam.Player:
+                            return true;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case EntityTeam.NeutralCantBeHit:
+                    switch (defender.EntityTeam)
+                    {
+                        case EntityTeam.EnemyHostileTowardOthers:
+                            return false;
+
+                        case EntityTeam.Enemy:
+                        case EntityTeam.NeutralCanBeHit:
+                        case EntityTeam.NeutralCantBeHit:
+                        case EntityTeam.Player:
+                            return true;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case EntityTeam.EnemyHostileTowardOthers:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

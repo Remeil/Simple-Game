@@ -58,10 +58,12 @@ namespace SimpleGameTests.EngineTests
         }
 
 
-        [TestCase(15, 10)]
-        [TestCase(7, 7)]
-        [TestCase(6.52, 6.51)]
-        public void TakeDamage_GivenLethalDamage_TargetIsDead(decimal damage, decimal health)
+        [TestCase(15, 10, ExpectedResult = false)]
+        [TestCase(7, 7, ExpectedResult = false)]
+        [TestCase(6.52, 6.51, ExpectedResult = false)]
+        [TestCase(10, 15, ExpectedResult = true)]
+        [TestCase(0, .01, ExpectedResult = true)]
+        public bool TakeDamage_GivenDamage_TargetIsDeadIfHealthIsZero(decimal damage, decimal health)
         {
             //Arrange
             DamageTaker.Stats.CurrentHp = health;
@@ -70,7 +72,7 @@ namespace SimpleGameTests.EngineTests
             DamageTaker.TakeDamage(damage, DamageDealer.Name);
 
             //Assert
-            Assert.IsFalse(DamageTaker.IsAlive);
+            return DamageTaker.IsAlive;
         }
 
         [TestCase(10)]
@@ -283,6 +285,28 @@ namespace SimpleGameTests.EngineTests
 
             //Act
             var actual = DamageDealer.TryToHit(DamageTaker, CombatType.Ranged);
+
+            //Assert
+            return actual;
+        }
+
+        [TestCase(EntityTeam.Player, EntityTeam.Enemy, ExpectedResult = false)]
+        [TestCase(EntityTeam.Enemy, EntityTeam.Enemy, ExpectedResult = true)]
+        [TestCase(EntityTeam.Enemy, EntityTeam.EnemyHostileTowardOthers, ExpectedResult = false)]
+        [TestCase(EntityTeam.EnemyHostileTowardOthers, EntityTeam.EnemyHostileTowardOthers, ExpectedResult = false)]
+        [TestCase(EntityTeam.Player, EntityTeam.NeutralCantBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.Player, EntityTeam.NeutralCanBeHit, ExpectedResult = false)]
+        [TestCase(EntityTeam.NeutralCanBeHit, EntityTeam.NeutralCanBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.NeutralCantBeHit, EntityTeam.NeutralCanBeHit, ExpectedResult = true)]
+        [TestCase(EntityTeam.NeutralCanBeHit, EntityTeam.NeutralCantBeHit, ExpectedResult = true)]
+        public bool OnFriendlyTeam_VariousTeams_DeterminesFriendlinessCorrectly(EntityTeam team1, EntityTeam team2)
+        {
+            //Arrange
+            DamageDealer.EntityTeam = team1;
+            DamageTaker.EntityTeam = team2;
+
+            //Act
+            var actual = DamageDealer.OnFriendlyTeam(DamageTaker);
 
             //Assert
             return actual;

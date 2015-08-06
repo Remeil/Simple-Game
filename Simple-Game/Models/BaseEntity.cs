@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Engine;
 using SimpleGame.Enumerators;
 
 namespace SimpleGame.Models
@@ -45,6 +47,33 @@ namespace SimpleGame.Models
                 }
             }
             return false;
+        }
+
+        protected bool MoveOrAttack(IMap map, EntityManager entities, int x, int y)
+        {
+            var otherEntity = entities.GetEntityInSquare(x, y);
+            if (otherEntity != null)
+            {
+                this.MakeMeleeAttack(otherEntity);
+                return true;
+            }
+            else
+            {
+                return Move(x, y, map);
+            }
+        }
+
+        public bool IsVisible(IMap map)
+        {
+            return map.IsInFov(X, Y);
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            float multiplier = Scale * Sprite.Width;
+            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
+              null, null, null, 0.0f, new Vector2(Scale, Scale),
+              Color.White, SpriteEffects.None, 0.4f);
         }
     }
 }

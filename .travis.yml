@@ -1,14 +1,17 @@
+sudo: false
 language: csharp
 solution: Simple-Game/SimpleGame.sln
 install:
 - nuget restore Simple-Game/SimpleGame.sln
 - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-- xbuild /p:Configuration=Release Simple-Game/SimpleGame.sln
+- xbuild /p:Configuration=Release Simple-Game/SimpleGame.csproj
+- xbuild /p:Configuration=Release SimpleGameTests/SimpleGameTests.csproj
 - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./SimpleGameTests/bin/Release/SimpleGameTests.dll
 notifications:
   hipchat: 
     rooms:
-      secure: "V0onDSslRdTc3ST/4jC1f3YxG885SDJN4x+NLygaVshbp89JBQGhyMst3eDmKhvFDQu3rn8JEFw5SlcNnkKoKVYNjybpaIJv548k0trIDFkjG4t/Q9Rjulu5sIcR7zxkYc4li8P4K2ytpyrcRXflgS5kF6uAtzo2teotiXRjyUs="
+      - secure: "V0onDSslRdTc3ST/4jC1f3YxG885SDJN4x+NLygaVshbp89JBQGhyMst3eDmKhvFDQu3rn8JEFw5SlcNnkKoKVYNjybpaIJv548k0trIDFkjG4t/Q9Rjulu5sIcR7zxkYc4li8P4K2ytpyrcRXflgS5kF6uAtzo2teotiXRjyUs="
+      - secure: "JIQ85WFSLWss6+cFf4hrNLMrsNMkWI4fsZYQN5GIhl3GQC5Veiebq8DPx9LWb5r1l9EqgP6T9m6rccZBr4cCm01HDtI15/NXoImuSSmpmhB9eJPbMol20udImotzBwPfWc3ihM3OeGTAff+FavxydtLk+U7E//fmQ3GVdO8FjCI="
     template:
-      - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
+      - 'Simple Game#%{build_number} (%{branch} - %{commit_subject}): %{message}'

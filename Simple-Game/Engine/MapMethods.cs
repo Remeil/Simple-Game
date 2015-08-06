@@ -1,6 +1,9 @@
 ﻿using System.Linq;
+using EmptyKeys.UserInterface.Generated;
+using Microsoft.Xna.Framework;
 using RogueSharp;
 using RogueSharp.Random;
+using SimpleGame.Models;
 
 namespace SimpleGame.Engine
 {
@@ -29,6 +32,12 @@ namespace SimpleGame.Engine
                     return map.GetCell(x, y);
                 }
             }
+        }
+
+        public static void DrawUi(this UserInterface userInterface, GameTime gameTime, BaseEntity entity)
+        {
+            userInterface.DataContext = entity.Stats;
+            userInterface.Draw(gameTime.ElapsedGameTime.Milliseconds);
         }
     }
 }

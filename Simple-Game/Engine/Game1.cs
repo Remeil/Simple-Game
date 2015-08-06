@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using EmptyKeys.UserInterface;
+using EmptyKeys.UserInterface.Generated;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
@@ -12,19 +15,23 @@ namespace SimpleGame.Engine
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
         private InputState _inputState;
         private Texture2D _wall;
         private Texture2D _floor;
         private IMap _map;
-        private Player _player;
-        private Enemy _enemy;
         private EntityManager _entityManager;
+        private Player _player;
+        private UserInterface _userInterface;
+        private int _nativeScreenWidth;
+        private int _nativeScreenHeight;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreparingDeviceSettings += GraphicsPreparingDeviceSettings;
+            graphics.DeviceCreated += GraphicsDeviceCreated;
         }
 
         /// <summary>
@@ -36,12 +43,30 @@ namespace SimpleGame.Engine
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
+            //IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
+            IMapCreationStrategy<Map> mapCreationStrategy = new BorderOnlyMapCreationStrategy<Map>(50, 30);
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
             _entityManager = new EntityManager();
 
             base.Initialize();
+        }
+
+        void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            _nativeScreenWidth = graphics.PreferredBackBufferWidth;
+            _nativeScreenHeight = graphics.PreferredBackBufferHeight;
+
+            // Or any other resolution
+            graphics.PreferredBackBufferWidth = _nativeScreenWidth + 32;
+            graphics.PreferredBackBufferHeight = _nativeScreenHeight + 32;
+            graphics.PreferMultiSampling = true;
+            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+        }
+
+        void GraphicsDeviceCreated(object sender, EventArgs e)
+        {
+            EmptyKeys.UserInterface.Engine engine = new MonoGameEngine(GraphicsDevice, _nativeScreenWidth, _nativeScreenHeight);
         }
 
         /// <summary>
@@ -51,11 +76,16 @@ namespace SimpleGame.Engine
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Create the user interface
+            var font = Content.Load<SpriteFont>("UI/Segoe_UI_9_Regular");
+            FontManager.DefaultFont = EmptyKeys.UserInterface.Engine.Instance.Renderer.CreateFont(font);
+            _userInterface = new UserInterface(_nativeScreenWidth, _nativeScreenHeight);
 
             // TODO: use this.Content to load your game content here
-            _wall = this.Content.Load<Texture2D>("Wall.png");
-            _floor = this.Content.Load<Texture2D>("Floor.png");
+            _wall = Content.Load<Texture2D>("Wall.png");
+            _floor = Content.Load<Texture2D>("Floor.png");
 
             Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
@@ -72,7 +102,7 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            _enemy = new Enemy (_map)
+            var enemy = new Enemy(_map)
             {
                 X = otherStartingLoc.X,
                 Y = otherStartingLoc.Y,
@@ -86,7 +116,7 @@ namespace SimpleGame.Engine
             };
 
             _entityManager.Entities.Add(_player);
-            _entityManager.Entities.Add(_enemy);
+            _entityManager.Entities.Add(enemy);
 
             //Set starting FOV
             UpdatePlayerFieldOfView();
@@ -116,24 +146,40 @@ namespace SimpleGame.Engine
             _inputState.Update();
 
             var nextEntity = _entityManager.GetNextEntity();
-            if (nextEntity == _player)
+            if (!nextEntity.IsAlive)
             {
-                if (_player.HandleInput(_inputState, _map))
+                _entityManager.RemoveEntity(nextEntity);
+            }
+
+            var player = nextEntity as Player;
+            if (player != null)
+            {
+                var entity = player;
+                if (entity.HandleInput(_inputState, _map, _entityManager))
                 {
                     UpdatePlayerFieldOfView();
-                    nextEntity.Timer += 800;
+                    player.Timer += 800;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }
             }
-            else if (nextEntity == _enemy)
+            else
             {
-                _enemy.HandleTurn(_player, _map);
-                nextEntity.Timer += 1000;
-                _entityManager.UpdateTimers();
-                _entityManager.Debug();
+                var enemy = nextEntity as Enemy;
+                if (enemy != null)
+                {
+                    var entity = enemy;
+                    entity.HandleTurn(_player, _map, _entityManager);
+                    enemy.Timer += 1000;
+                    _entityManager.UpdateTimers();
+                    _entityManager.Debug();
+                }
             }
-            
+
+            //Update User interface
+            _userInterface.UpdateInput(gameTime.ElapsedGameTime.Milliseconds);
+            _userInterface.UpdateLayout(gameTime.ElapsedGameTime.Milliseconds);
+
             base.Update(gameTime);
         }
 
@@ -146,7 +192,10 @@ namespace SimpleGame.Engine
             GraphicsDevice.Clear(Color.TransparentBlack);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+
+            //Draw UI
+            _userInterface.DrawUi(gameTime, _player);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
@@ -154,7 +203,7 @@ namespace SimpleGame.Engine
             foreach (Cell cell in _map.GetAllCells())
             {
                 //calulate curr position based on sprite size and scale
-                var position = new Vector2(cell.X * sizeOfSprites * scale, cell.Y * sizeOfSprites * scale);
+                var position = new Vector2(cell.X * sizeOfSprites * scale + 16, cell.Y * sizeOfSprites * scale + 16);
 
                 //not currently visible to player
                 if (!cell.IsExplored)
@@ -172,7 +221,7 @@ namespace SimpleGame.Engine
                 //floor tile
                 if (cell.IsWalkable)
                 {
-                    spriteBatch.Draw(_floor, position,
+                    _spriteBatch.Draw(_floor, position,
                       null, null, null, 0.0f, new Vector2(scale, scale),
                       tint, SpriteEffects.None, 0.8f);
                 }
@@ -180,21 +229,63 @@ namespace SimpleGame.Engine
                 //wall
                 else
                 {
-                    spriteBatch.Draw(_wall, position,
+                    _spriteBatch.Draw(_wall, position,
                        null, null, null, 0.0f, new Vector2(scale, scale),
                        tint, SpriteEffects.None, 0.8f);
                 }
             }
 
-            //draw the player sprite
-            _player.Draw(spriteBatch);
-
-            if (_enemy.IsVisible(_map))
+            var entitiesToAdd = new List<BaseEntity>();
+            var entitiesToRemove = new List<BaseEntity>();
+            //Draw all the sprites
+            foreach (var entity in _entityManager.Entities)
             {
-                _enemy.Draw(spriteBatch);
+                if (entity.IsVisible(_map) && entity.IsAlive)
+                {
+                    entity.Draw(_spriteBatch);
+                }
+                else if (!entity.IsAlive && entity is Enemy)
+                {
+                    var startingLoc = _map.GetRandomWalkableCell();
+                    entitiesToAdd.Add(new Enemy(_map)
+                        {
+                            X = startingLoc.X,
+                            Y = startingLoc.Y,
+                            Scale = 0.5f,
+                            Sprite = Content.Load<Texture2D>("Enemy.png"),
+                            WeaponDamage = 8,
+                            ArmorBlock = 2,
+                            Stats = new StatBlock(),
+                            Timer = 50000,
+                            Name = "Big Bad"
+                        });
+                    entitiesToRemove.Add(entity);
+                }
+                else
+                {
+                    if (entity is Player)
+                    {
+                        Console.WriteLine("GG RITO");
+                        Exit();
+                    }
+                }
             }
 
-            spriteBatch.End();
+            foreach (var entity in entitiesToAdd)
+            {
+                _entityManager.Entities.Add(entity);
+                if (entity.IsVisible(_map))
+                {
+                    entity.Draw(_spriteBatch);
+                }
+            }
+
+            foreach (var entity in entitiesToRemove)
+            {
+                _entityManager.RemoveEntity(entity);
+            }
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
