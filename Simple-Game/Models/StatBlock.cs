@@ -1,6 +1,10 @@
-﻿namespace SimpleGame.Models
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SimpleGame.Annotations;
+
+namespace SimpleGame.Models
 {
-    public class StatBlock
+    public class StatBlock : INotifyPropertyChanged
     {
         public StatBlock()
         {
@@ -25,7 +29,8 @@
         public decimal MaxHp{ get { return (BaseHp + HpMod) * (decimal)3.2 + 25; } }
         public decimal BaseHp { get; set; }
         public int HpMod { get; set; }
-        public decimal CurrentHp { get; set; }
+        public decimal CurrentHp { get { return currentHp; } set { currentHp = value; OnPropertyChanged(); } }
+        private decimal currentHp;
 
         public decimal MaxMp { get { return (BaseMp + MpMod) * (decimal)2.4 + 10; } }
         public decimal BaseMp { get; set; }
@@ -57,5 +62,17 @@
         public int Magic { get { return BaseMagic + MagicMod; } }
         public int BaseMagic { get; set; }
         public int MagicMod { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

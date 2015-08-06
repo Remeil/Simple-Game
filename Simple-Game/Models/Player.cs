@@ -1,14 +1,11 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using SimpleGame.Annotations;
 using SimpleGame.Engine;
 
 namespace SimpleGame.Models
 {
-    public class Player : BaseEntity, INotifyPropertyChanged
+    public class Player : BaseEntity
     {
 
         public Player()
@@ -53,15 +50,6 @@ namespace SimpleGame.Models
                 return MoveOrAttack(map, entities, X, Y + 1);
             }
             return false;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
