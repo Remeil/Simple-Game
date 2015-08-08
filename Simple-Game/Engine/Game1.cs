@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using EmptyKeys.UserInterface;
 using EmptyKeys.UserInterface.Generated;
+using EmptyKeys.UserInterface.Media;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
@@ -42,8 +43,7 @@ namespace SimpleGame.Engine
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            //IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(50, 30, 100, 7, 3);
-            IMapCreationStrategy<Map> mapCreationStrategy = new BorderOnlyMapCreationStrategy<Map>(50, 30);
+            IMapCreationStrategy<Map> mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(48, 28, 25, 10, 3);
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
             _entityManager = new EntityManager();
@@ -58,8 +58,8 @@ namespace SimpleGame.Engine
             _nativeScreenHeight = graphics.PreferredBackBufferHeight;
 
             // Or any other resolution
-            graphics.PreferredBackBufferWidth = _nativeScreenWidth + 32;
-            graphics.PreferredBackBufferHeight = _nativeScreenHeight + 32;
+            graphics.PreferredBackBufferWidth = _nativeScreenWidth;
+            graphics.PreferredBackBufferHeight = _nativeScreenHeight;
             graphics.PreferMultiSampling = true;
             graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
@@ -81,7 +81,8 @@ namespace SimpleGame.Engine
             // Create the user interface
             var font = Content.Load<SpriteFont>("UI/Segoe_UI_9_Regular");
             FontManager.DefaultFont = EmptyKeys.UserInterface.Engine.Instance.Renderer.CreateFont(font);
-            _userInterface = new UserInterface(_nativeScreenWidth + 32, _nativeScreenHeight + 32);
+            _userInterface = new UserInterface(_nativeScreenWidth, _nativeScreenHeight);
+            _userInterface.Background = new SolidColorBrush(ColorW.Black);
 
             // TODO: use this.Content to load your game content here
             _textures["wall"] = Content.Load<Texture2D>("Wall.png");
@@ -195,7 +196,7 @@ namespace SimpleGame.Engine
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             //Draw UI
-            _userInterface.DrawUi(gameTime, _player);
+            _userInterface.DrawUi(gameTime, _player.Stats);
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
