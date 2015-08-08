@@ -17,8 +17,7 @@ namespace SimpleGame.Engine
         private GraphicsDeviceManager graphics;
         private SpriteBatch _spriteBatch;
         private InputState _inputState;
-        private Texture2D _wall;
-        private Texture2D _floor;
+        private Dictionary<string, Texture2D> _textures; 
         private IMap _map;
         private EntityManager _entityManager;
         private Player _player;
@@ -48,11 +47,12 @@ namespace SimpleGame.Engine
             _map = Map.Create(mapCreationStrategy);
             _inputState = new InputState();
             _entityManager = new EntityManager();
+            _textures = new Dictionary<string, Texture2D>();
 
             base.Initialize();
         }
 
-        void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        private void GraphicsPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
             _nativeScreenWidth = graphics.PreferredBackBufferWidth;
             _nativeScreenHeight = graphics.PreferredBackBufferHeight;
@@ -64,7 +64,7 @@ namespace SimpleGame.Engine
             graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
 
-        void GraphicsDeviceCreated(object sender, EventArgs e)
+        private void GraphicsDeviceCreated(object sender, EventArgs e)
         {
             EmptyKeys.UserInterface.Engine engine = new MonoGameEngine(GraphicsDevice, _nativeScreenWidth, _nativeScreenHeight);
         }
@@ -81,11 +81,11 @@ namespace SimpleGame.Engine
             // Create the user interface
             var font = Content.Load<SpriteFont>("UI/Segoe_UI_9_Regular");
             FontManager.DefaultFont = EmptyKeys.UserInterface.Engine.Instance.Renderer.CreateFont(font);
-            _userInterface = new UserInterface(_nativeScreenWidth, _nativeScreenHeight);
+            _userInterface = new UserInterface(_nativeScreenWidth + 32, _nativeScreenHeight + 32);
 
             // TODO: use this.Content to load your game content here
-            _wall = Content.Load<Texture2D>("Wall.png");
-            _floor = Content.Load<Texture2D>("Floor.png");
+            _textures["wall"] = Content.Load<Texture2D>("Wall.png");
+            _textures["floor"] = Content.Load<Texture2D>("Floor.png");
 
             Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
@@ -119,7 +119,7 @@ namespace SimpleGame.Engine
             _entityManager.Entities.Add(enemy);
 
             //Set starting FOV
-            UpdatePlayerFieldOfView();
+            _map.UpdatePlayerFieldOfView(_player);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SimpleGame.Engine
                 var entity = player;
                 if (entity.HandleInput(_inputState, _map, _entityManager))
                 {
-                    UpdatePlayerFieldOfView();
+                    _map.UpdatePlayerFieldOfView(_player);
                     player.Timer += 800;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
@@ -199,41 +199,8 @@ namespace SimpleGame.Engine
 
             const int sizeOfSprites = 32;
             const float scale = .5f;
-            //iterate through each cell
-            foreach (Cell cell in _map.GetAllCells())
-            {
-                //calulate curr position based on sprite size and scale
-                var position = new Vector2(cell.X * sizeOfSprites * scale + 16, cell.Y * sizeOfSprites * scale + 16);
 
-                //not currently visible to player
-                if (!cell.IsExplored)
-                {
-                    continue;
-                }
-
-                //cell has been explored but is not in FOV
-                var tint = Color.White;
-                if (!cell.IsInFov)
-                {
-                    tint = Color.DarkGray;
-                }
-
-                //floor tile
-                if (cell.IsWalkable)
-                {
-                    _spriteBatch.Draw(_floor, position,
-                      null, null, null, 0.0f, new Vector2(scale, scale),
-                      tint, SpriteEffects.None, 0.8f);
-                }
-
-                //wall
-                else
-                {
-                    _spriteBatch.Draw(_wall, position,
-                       null, null, null, 0.0f, new Vector2(scale, scale),
-                       tint, SpriteEffects.None, 0.8f);
-                }
-            }
+            _map.DrawMap(_spriteBatch, _textures, sizeOfSprites, scale);
 
             var entitiesToAdd = new List<BaseEntity>();
             var entitiesToRemove = new List<BaseEntity>();
@@ -288,18 +255,6 @@ namespace SimpleGame.Engine
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private void UpdatePlayerFieldOfView()
-        {
-            _map.ComputeFov(_player.X, _player.Y, 10, true);
-            foreach (Cell cell in _map.GetAllCells())
-            {
-                if (_map.IsInFov(cell.X, cell.Y))
-                {
-                    _map.SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
-                }
-            }
         }
     }
 }
