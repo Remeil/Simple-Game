@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using EmptyKeys.UserInterface.Generated;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
