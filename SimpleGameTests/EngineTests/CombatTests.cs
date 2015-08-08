@@ -58,10 +58,12 @@ namespace SimpleGameTests.EngineTests
         }
 
 
-        [TestCase(15, 10)]
-        [TestCase(7, 7)]
-        [TestCase(6.52, 6.51)]
-        public void TakeDamage_GivenLethalDamage_TargetIsDead(decimal damage, decimal health)
+        [TestCase(15, 10, ExpectedResult = false)]
+        [TestCase(7, 7, ExpectedResult = false)]
+        [TestCase(6.52, 6.51, ExpectedResult = false)]
+        [TestCase(10, 15, ExpectedResult = true)]
+        [TestCase(0, .01, ExpectedResult = true)]
+        public bool TakeDamage_GivenDamage_TargetIsDeadIfHealthIsZero(decimal damage, decimal health)
         {
             //Arrange
             DamageTaker.Stats.CurrentHp = health;
@@ -70,7 +72,7 @@ namespace SimpleGameTests.EngineTests
             DamageTaker.TakeDamage(damage, DamageDealer.Name);
 
             //Assert
-            Assert.IsFalse(DamageTaker.IsAlive);
+            return DamageTaker.IsAlive;
         }
 
         [TestCase(10)]
