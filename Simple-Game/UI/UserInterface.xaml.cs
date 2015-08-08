@@ -29,6 +29,18 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private TextBlock CurrentHp;
         
+        private TextBlock e_2;
+        
+        private TextBlock MaxHp;
+        
+        private TextBlock e_3;
+        
+        private TextBlock CurrentMp;
+        
+        private TextBlock e_4;
+        
+        private TextBlock MaxMp;
+        
         public UserInterface(int width, int height) : 
                 base(width, height) {
             Style style = RootStyle.CreateRootStyle();
@@ -46,16 +58,64 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_1 = new TextBlock();
             this.e_0.Children.Add(this.e_1);
             this.e_1.Name = "e_1";
-            this.e_1.Margin = new Thickness(0F, 0F, 238F, 277F);
-            this.e_1.Text = "Current HP:";
+            this.e_1.Margin = new Thickness(0F, 464F, 777F, 0F);
+            this.e_1.Text = "HP:";
             // CurrentHp element
             this.CurrentHp = new TextBlock();
             this.e_0.Children.Add(this.CurrentHp);
             this.CurrentHp.Name = "CurrentHp";
-            this.CurrentHp.Margin = new Thickness(67F, 0F, 206F, 277F);
+            this.CurrentHp.Margin = new Thickness(28F, 464F, 736F, 0F);
+            this.CurrentHp.TextAlignment = TextAlignment.Right;
             Binding binding_CurrentHp_Text = new Binding("CurrentHp");
             binding_CurrentHp_Text.Mode = BindingMode.OneWay;
             this.CurrentHp.SetBinding(TextBlock.TextProperty, binding_CurrentHp_Text);
+            // e_2 element
+            this.e_2 = new TextBlock();
+            this.e_0.Children.Add(this.e_2);
+            this.e_2.Name = "e_2";
+            this.e_2.Margin = new Thickness(69F, 464F, 717F, 0F);
+            this.e_2.Text = "/";
+            this.e_2.TextAlignment = TextAlignment.Center;
+            // MaxHp element
+            this.MaxHp = new TextBlock();
+            this.e_0.Children.Add(this.MaxHp);
+            this.MaxHp.Name = "MaxHp";
+            this.MaxHp.Margin = new Thickness(88F, 464F, 676F, 0F);
+            this.MaxHp.TextAlignment = TextAlignment.Right;
+            Binding binding_MaxHp_Text = new Binding("MaxHp");
+            binding_MaxHp_Text.Mode = BindingMode.OneWay;
+            this.MaxHp.SetBinding(TextBlock.TextProperty, binding_MaxHp_Text);
+            // e_3 element
+            this.e_3 = new TextBlock();
+            this.e_0.Children.Add(this.e_3);
+            this.e_3.Name = "e_3";
+            this.e_3.Margin = new Thickness(129F, 464F, 648F, 0F);
+            this.e_3.Text = "MP:";
+            // CurrentMp element
+            this.CurrentMp = new TextBlock();
+            this.e_0.Children.Add(this.CurrentMp);
+            this.CurrentMp.Name = "CurrentMp";
+            this.CurrentMp.Margin = new Thickness(157F, 464F, 607F, 0F);
+            this.CurrentMp.TextAlignment = TextAlignment.Right;
+            Binding binding_CurrentMp_Text = new Binding("CurrentMp");
+            binding_CurrentMp_Text.Mode = BindingMode.OneWay;
+            this.CurrentMp.SetBinding(TextBlock.TextProperty, binding_CurrentMp_Text);
+            // e_4 element
+            this.e_4 = new TextBlock();
+            this.e_0.Children.Add(this.e_4);
+            this.e_4.Name = "e_4";
+            this.e_4.Margin = new Thickness(198F, 464F, 588F, 0F);
+            this.e_4.Text = "/";
+            this.e_4.TextAlignment = TextAlignment.Center;
+            // MaxMp element
+            this.MaxMp = new TextBlock();
+            this.e_0.Children.Add(this.MaxMp);
+            this.MaxMp.Name = "MaxMp";
+            this.MaxMp.Margin = new Thickness(217F, 464F, 547F, 0F);
+            this.MaxMp.TextAlignment = TextAlignment.Right;
+            Binding binding_MaxMp_Text = new Binding("MaxMp");
+            binding_MaxMp_Text.Mode = BindingMode.OneWay;
+            this.MaxMp.SetBinding(TextBlock.TextProperty, binding_MaxMp_Text);
             FontManager.Instance.AddFont("Segoe UI", 12F, FontStyle.Regular, "Segoe_UI_9_Regular");
         }
     }
