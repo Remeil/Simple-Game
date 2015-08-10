@@ -203,6 +203,15 @@ namespace SimpleGame.Engine
 
             _map.DrawMap(_spriteBatch, _textures, sizeOfSprites, scale);
 
+            HandleEntities();
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        private void HandleEntities()
+        {
             var entitiesToAdd = new List<BaseEntity>();
             var entitiesToRemove = new List<BaseEntity>();
             //Draw all the sprites
@@ -216,17 +225,17 @@ namespace SimpleGame.Engine
                 {
                     var startingLoc = _map.GetRandomWalkableCell();
                     entitiesToAdd.Add(new Enemy(_map)
-                        {
-                            X = startingLoc.X,
-                            Y = startingLoc.Y,
-                            Scale = 0.5f,
-                            Sprite = Content.Load<Texture2D>("Enemy.png"),
-                            WeaponDamage = 8,
-                            ArmorBlock = 2,
-                            Stats = new StatBlock(),
-                            Timer = 50000,
-                            Name = "Big Bad"
-                        });
+                    {
+                        X = startingLoc.X,
+                        Y = startingLoc.Y,
+                        Scale = 0.5f,
+                        Sprite = Content.Load<Texture2D>("Enemy.png"),
+                        WeaponDamage = 8,
+                        ArmorBlock = 2,
+                        Stats = new StatBlock(),
+                        Timer = 50000,
+                        Name = "Big Bad"
+                    });
                     entitiesToRemove.Add(entity);
                 }
                 else
@@ -252,10 +261,6 @@ namespace SimpleGame.Engine
             {
                 _entityManager.RemoveEntity(entity);
             }
-
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }
