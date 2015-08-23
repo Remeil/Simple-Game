@@ -86,6 +86,7 @@ namespace SimpleGameTests.EngineTests
 
             //Act
             var expectedValue = DamageDealer.WeaponDamage * (1 + (decimal)DamageDealer.Stats.AttackPower / 30);
+            expectedValue  = Math.Truncate(expectedValue * 100) / 100;
             var actual = DamageDealer.CalculateDamageOn(DamageTaker);
 
             //Assert

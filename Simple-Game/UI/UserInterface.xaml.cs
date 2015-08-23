@@ -41,6 +41,8 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private TextBlock MaxMp;
         
+        private Border e_5;
+        
         public UserInterface(int width, int height) : 
                 base(width, height) {
             Style style = RootStyle.CreateRootStyle();
@@ -116,6 +118,13 @@ namespace EmptyKeys.UserInterface.Generated {
             Binding binding_MaxMp_Text = new Binding("MaxMp");
             binding_MaxMp_Text.Mode = BindingMode.OneWay;
             this.MaxMp.SetBinding(TextBlock.TextProperty, binding_MaxMp_Text);
+            // e_5 element
+            this.e_5 = new Border();
+            this.e_0.Children.Add(this.e_5);
+            this.e_5.Name = "e_5";
+            this.e_5.Margin = new Thickness(16F, 16F, 16F, 16F);
+            this.e_5.BorderBrush = new SolidColorBrush(new ColorW(211, 211, 211, 255));
+            this.e_5.BorderThickness = new Thickness(1F, 1F, 1F, 1F);
             FontManager.Instance.AddFont("Segoe UI", 12F, FontStyle.Regular, "Segoe_UI_9_Regular");
         }
     }

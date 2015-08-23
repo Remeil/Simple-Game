@@ -10,6 +10,7 @@ namespace SimpleGame.Models
         {
             CurrentHp = MaxHp;
             CurrentMp = MaxMp;
+            Level = 1;
         }
 
         public StatBlock(decimal baseHp, decimal baseMp, int baseAttackPower, int baseDefensePower, int baseDodge, int baseAccuracy, int baseSpeed, int baseMagic)
@@ -24,6 +25,7 @@ namespace SimpleGame.Models
             BaseAccuracy = baseAccuracy;
             BaseSpeed = baseSpeed;
             BaseMagic = baseMagic;
+            Level = 1;
         }
 
         public decimal MaxHp{ get { return (BaseHp + HpMod) * (decimal)3.2 + 25; } }
@@ -62,6 +64,9 @@ namespace SimpleGame.Models
         public int Magic { get { return BaseMagic + MagicMod; } }
         public int BaseMagic { get; set; }
         public int MagicMod { get; set; }
+
+        public long Experience { get; set; }
+        public int Level { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using EmptyKeys.UserInterface;
 using EmptyKeys.UserInterface.Generated;
 using EmptyKeys.UserInterface.Media;
@@ -213,7 +214,6 @@ namespace SimpleGame.Engine
         private void HandleEntities()
         {
             var entitiesToAdd = new List<BaseEntity>();
-            var entitiesToRemove = new List<BaseEntity>();
             //Draw all the sprites
             foreach (var entity in _entityManager.Entities)
             {
@@ -221,28 +221,12 @@ namespace SimpleGame.Engine
                 {
                     entity.Draw(_spriteBatch);
                 }
-                else if (!entity.IsAlive && entity is Enemy)
-                {
-                    var startingLoc = _map.GetRandomWalkableCell();
-                    entitiesToAdd.Add(new Enemy(_map)
-                    {
-                        X = startingLoc.X,
-                        Y = startingLoc.Y,
-                        Scale = 0.5f,
-                        Sprite = Content.Load<Texture2D>("Enemy.png"),
-                        WeaponDamage = 8,
-                        ArmorBlock = 2,
-                        Stats = new StatBlock(),
-                        Timer = 50000,
-                        Name = "Big Bad"
-                    });
-                    entitiesToRemove.Add(entity);
-                }
                 else
                 {
                     if (entity is Player)
                     {
                         Console.WriteLine("GG RITO");
+                        Thread.Sleep(2000);
                         Exit();
                     }
                 }
@@ -255,11 +239,6 @@ namespace SimpleGame.Engine
                 {
                     entity.Draw(_spriteBatch);
                 }
-            }
-
-            foreach (var entity in entitiesToRemove)
-            {
-                _entityManager.RemoveEntity(entity);
             }
         }
     }
