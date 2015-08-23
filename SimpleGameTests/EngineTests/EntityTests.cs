@@ -37,7 +37,7 @@ namespace SimpleGameTests.EngineTests
             Assert.AreEqual(expectedSpeed, entity.Stats.BaseSpeed);
         }
 
-        [TestCase(1, ExpectedResult = 750)]
+        [TestCase(1, ExpectedResult = 75)]
         public long HandleDeath_GivenEntityDies_GiveKillerExperience(int level)
         {
             //Arrange

@@ -125,8 +125,8 @@ namespace SimpleGame.Models
 
         public void HandleDeath(BaseEntity killer)
         {
-            var levelDifference = killer.Stats.Level - this.Stats.Level;
-            var baseExperience = this.Stats.Level * 750;
+            var levelDifference = this.Stats.Level - killer.Stats.Level;
+            var baseExperience = this.Stats.Level * 75;
             var grantedExperience = baseExperience * (Math.Pow(1.1,levelDifference));
             killer.GrantExperience((long) grantedExperience);
             Console.WriteLine(killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.");
