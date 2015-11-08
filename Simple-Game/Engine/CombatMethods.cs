@@ -29,9 +29,11 @@ namespace SimpleGame.Engine
         public static decimal CalculateDamageOn(this BaseEntity attacker, BaseEntity defender)
         {
             var randomModifier = Random.Next(80, 120);
-            var attackDamage = attacker.WeaponDamage * (1 + (decimal)attacker.Stats.AttackPower / 30) * ((decimal)randomModifier / 100);
-            var damageBlock = defender.ArmorBlock * (1 + (decimal)defender.Stats.DefensePower / 30);
-            return Math.Max(attackDamage - damageBlock, attackDamage * (decimal).05);
+            var attackDamage = attacker.WeaponDamage * (1 + attacker.Stats.AttackPower / 30m) * (randomModifier / 100m);
+            var damageBlock = defender.ArmorBlock * (1 + defender.Stats.DefensePower / 30m);
+            var dealtDamage = Math.Truncate((attackDamage - damageBlock) * 100) / 100;
+            var minimumDamage = Math.Truncate(attackDamage * .05m * 100) / 100;
+            return Math.Max(dealtDamage, minimumDamage);
         }
 
         public static bool TryToHit(this BaseEntity attacker, BaseEntity defender, CombatType range)

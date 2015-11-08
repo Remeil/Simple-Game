@@ -1,19 +1,15 @@
 ﻿using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 
 namespace SimpleGame.Models
 {
     public class Enemy : BaseEntity
     {
-        public Enemy()
-        {
-            
-        }
-
         public Enemy(IMap map)
         {
+            Stats = new StatBlock(0, 0, 0, 0, 0, 0, 0, 0);
+            WeaponDamage = 8;
+            ArmorBlock = 2;
             Map = map;
             PathFinder = new PathFinder(map);
         }

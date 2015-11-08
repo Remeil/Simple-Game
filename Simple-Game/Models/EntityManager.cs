@@ -19,6 +19,7 @@ namespace SimpleGame.Models
             foreach (var entity in Entities.OrderBy(x => x.Timer))
             {
                 Console.WriteLine("Entity Name: " + entity.Name + " Timer: " + entity.Timer);
+                Console.WriteLine("HP: " + entity.Stats.CurrentHp);
             }
             Console.WriteLine();
         }

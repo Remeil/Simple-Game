@@ -6,10 +6,13 @@ namespace SimpleGame.Models
 {
     public class StatBlock : INotifyPropertyChanged
     {
+        private const decimal HpMult = 3.2m;
+
         public StatBlock()
         {
             CurrentHp = MaxHp;
             CurrentMp = MaxMp;
+            Level = 1;
         }
 
         public StatBlock(decimal baseHp, decimal baseMp, int baseAttackPower, int baseDefensePower, int baseDodge, int baseAccuracy, int baseSpeed, int baseMagic)
@@ -24,13 +27,30 @@ namespace SimpleGame.Models
             BaseAccuracy = baseAccuracy;
             BaseSpeed = baseSpeed;
             BaseMagic = baseMagic;
+            Level = 1;
         }
 
-        public decimal MaxHp{ get { return (BaseHp + HpMod) * (decimal)3.2 + 25; } }
-        public decimal BaseHp { get; set; }
+        public decimal MaxHp { get { return (BaseHp + HpMod) * HpMult + 25; } }
+        public decimal BaseHp
+        {
+            get
+            {
+                return _baseHp;
+            }
+            set
+            {
+                var oldBaseHp = _baseHp;
+                _baseHp = value;
+                _currentHp += (_baseHp - oldBaseHp) * HpMult;
+                OnPropertyChanged("MaxHp");
+                OnPropertyChanged("CurrentHp");
+            }
+        }
+
         public int HpMod { get; set; }
-        public decimal CurrentHp { get { return currentHp; } set { currentHp = value; OnPropertyChanged(); } }
-        private decimal currentHp;
+        public decimal CurrentHp { get { return _currentHp; } set { _currentHp = value; OnPropertyChanged(); } }
+        private decimal _currentHp;
+        private decimal _baseHp;
 
         public decimal MaxMp { get { return (BaseMp + MpMod) * (decimal)2.4 + 10; } }
         public decimal BaseMp { get; set; }
@@ -62,6 +82,9 @@ namespace SimpleGame.Models
         public int Magic { get { return BaseMagic + MagicMod; } }
         public int BaseMagic { get; set; }
         public int MagicMod { get; set; }
+
+        public long Experience { get; set; }
+        public int Level { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -15,5 +15,6 @@
         <TextBlock TextAlignment="Right" x:Name="CurrentMp" Text="{Binding CurrentMp, Mode=OneWay}" Margin="157,464,607,0"></TextBlock>
         <TextBlock TextAlignment="Center" Margin="198,464,588,0">/</TextBlock>
         <TextBlock TextAlignment="Right" x:Name="MaxMp" Text="{Binding MaxMp, Mode=OneWay}" Margin="217,464,547,0"></TextBlock>
+        <Border BorderBrush="LightGray" BorderThickness="1" Margin="16"/>
     </Grid>
 </ek:UIRoot>
