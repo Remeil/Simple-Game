@@ -20,8 +20,8 @@ namespace SimpleGameTests.EngineTests
         [SetUp]
         public void Setup()
         {
-            Entity.X = 3;
-            Entity.Y = 3;
+            Entity.Location.X = 3;
+            Entity.Location.Y = 3;
         }
 
         [TestCase(2, 2, ExpectedResult = false)]
@@ -34,7 +34,7 @@ namespace SimpleGameTests.EngineTests
             //Arrange
 
             //Act
-            var actual = Entity.Move(x, y, Map);
+            var actual = Entity.Move(new Point(x, y), Map);
 
             //Assert
             return actual;

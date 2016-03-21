@@ -82,7 +82,7 @@ namespace SimpleGame.Engine
 
         public static void UpdatePlayerFieldOfView(this IMap map, BaseEntity player)
         {
-            map.ComputeFov(player.X, player.Y, 10, true);
+            map.ComputeFov(player.Location.X, player.Location.Y, 10, true);
             foreach (Cell cell in map.GetAllCells())
             {
                 if (map.IsInFov(cell.X, cell.Y))

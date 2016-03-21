@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
+using RogueSharp;
 
 namespace SimpleGame.Models
 {
-    public class EntityManager
+    public class EntityManager : IEntityManager
     {
         public EntityManager()
         {
@@ -29,9 +30,9 @@ namespace SimpleGame.Models
             return Entities.MinBy(entity => entity.Timer);
         }
 
-        public BaseEntity GetEntityInSquare(int x, int y)
+        public BaseEntity GetEntityInSquare(Point loc)
         {
-            return Entities.SingleOrDefault(entity => entity.X == x && entity.Y == y);
+            return Entities.SingleOrDefault(entity => entity.Location == loc);
         }
 
         public void UpdateTimers()

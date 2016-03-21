@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Models;
+using SimpleGame.Models.EnemyAI;
+using Point = RogueSharp.Point;
 
 namespace SimpleGame.Engine
 {
@@ -92,8 +94,7 @@ namespace SimpleGame.Engine
             Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
             {
-                X = startingLoc.X,
-                Y = startingLoc.Y,
+                Location = new Point(startingLoc.X, startingLoc.Y),
                 Scale = 0.5f,
                 Sprite = Content.Load<Texture2D>("Player.png"),
                 WeaponDamage = 10,
@@ -104,10 +105,9 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            var enemy = new Enemy(_map)
+            var enemy = new Enemy(_map, new Sentry(false, null))
             {
-                X = otherStartingLoc.X,
-                Y = otherStartingLoc.Y,
+                Location = new Point(otherStartingLoc.X, otherStartingLoc.Y),
                 Scale = 0.5f,
                 Sprite = Content.Load<Texture2D>("Enemy.png"),
                 WeaponDamage = 8,

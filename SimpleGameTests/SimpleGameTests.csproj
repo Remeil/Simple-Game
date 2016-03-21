@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\Simple-Game\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.core">
       <HintPath>..\Simple-Game\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
@@ -65,7 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EngineTests\CombatTests.cs" />
-    <Compile Include="EngineTests\EntityTests.cs" />
+    <Compile Include="ModelTests\AiTests.cs" />
+    <Compile Include="ModelTests\EntityTests.cs" />
     <Compile Include="EngineTests\MapTests.cs" />
     <Compile Include="EntityManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

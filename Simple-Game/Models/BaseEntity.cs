@@ -4,16 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
 using SimpleGame.Enumerators;
+using SimpleGame.Models.EnemyAI;
+using Point = RogueSharp.Point;
 
 namespace SimpleGame.Models
 {
     public class BaseEntity
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public Point Location { get; set; }
         public float Scale { get; set; }
         public Texture2D Sprite { get; set; }
-        public PathFinder PathFinder { get; set; }
+        public PathFinder Pathfinder { get; set; }
         public IMap Map { get; set; }
         public string Name { get; set; }
         public StatBlock Stats { get; set; }
@@ -21,6 +22,11 @@ namespace SimpleGame.Models
         public decimal ArmorBlock { get; set; }
         public int Timer { get; set; }
         public EntityTeam EntityTeam { get; set; }
+
+        public BaseEntity()
+        {
+            Location = new Point();
+        }
 
         public bool IsAlive
         {
@@ -33,25 +39,24 @@ namespace SimpleGame.Models
             Console.WriteLine(name + " has dealt " + damage + " damage to " + Name);
         }
 
-        public virtual bool Move(int xCoord, int yCoord, IMap map)
+        public virtual bool Move(Point coord, IMap map)
         {
-            if (map.IsWalkable(xCoord, yCoord))
+            if (map.IsWalkable(coord.X, coord.Y))
             {
-                var xDist = Math.Abs(xCoord - X);
-                var yDist = Math.Abs(yCoord - Y);
+                var xDist = Math.Abs(coord.X - Location.X);
+                var yDist = Math.Abs(coord.Y - Location.Y);
                 if (xDist <= 1 && yDist <= 1 && xDist + yDist < 2)
                 {
-                    X = xCoord;
-                    Y = yCoord;
+                    Location = coord;
                     return true;
                 }
             }
             return false;
         }
 
-        protected bool MoveOrAttack(IMap map, EntityManager entities, int x, int y)
+        public bool MoveOrAttack(IMap map, IEntityManager entities, Point loc)
         {
-            var otherEntity = entities.GetEntityInSquare(x, y);
+            var otherEntity = entities.GetEntityInSquare(loc);
             if (otherEntity != null)
             {
                 this.MakeMeleeAttack(otherEntity);
@@ -60,25 +65,25 @@ namespace SimpleGame.Models
                     entities.RemoveEntity(otherEntity);
                     otherEntity.HandleDeath(this);
                     var square = map.GetRandomWalkableCell();
-                    entities.Entities.Add(new Enemy(map) { X = square.X, Y = square.Y, Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad"});
+                    entities.Entities.Add(new Enemy(map, new Sentry(false, this)) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
                 }
                 return true;
             }
             else
             {
-                return Move(x, y, map);
+                return Move(loc, map);
             }
         }
 
         public bool IsVisible(IMap map)
         {
-            return map.IsInFov(X, Y);
+            return map.IsInFov(Location.X, Location.Y);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
+            spriteBatch.Draw(Sprite, new Vector2(Location.X * multiplier + 16, Location.Y * multiplier + 16),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.4f);
         }

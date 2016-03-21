@@ -2,23 +2,23 @@
 using SimpleGame.Enumerators;
 using SimpleGame.Models;
 
-namespace SimpleGameTests.EngineTests
+namespace SimpleGameTests.ModelTests
 {
     [TestFixture]
     public class EntityTests
     {
-        private BaseEntity entity;
+        private BaseEntity _entity;
 
         [TestFixtureSetUp]
         public void Init()
         {
-            entity = new BaseEntity();
+            _entity = new BaseEntity();
         }
 
         [SetUp]
         public void Setup()
         {
-            entity.Stats = new StatBlock();
+            _entity.Stats = new StatBlock();
         }
 
         [Test]
@@ -26,15 +26,15 @@ namespace SimpleGameTests.EngineTests
         {
             //Arrange
             //Act
-            var expectedAttack = entity.Stats.BaseAttackPower + 3;
-            var expectedDefense = entity.Stats.BaseDefensePower + 2;
-            var expectedSpeed = entity.Stats.BaseSpeed + 1;
-            entity.LevelUp(Stat.Attack, Stat.Defense, Stat.Speed);
+            var expectedAttack = _entity.Stats.BaseAttackPower + 3;
+            var expectedDefense = _entity.Stats.BaseDefensePower + 2;
+            var expectedSpeed = _entity.Stats.BaseSpeed + 1;
+            _entity.LevelUp(Stat.Attack, Stat.Defense, Stat.Speed);
 
             //Assert
-            Assert.AreEqual(expectedAttack, entity.Stats.BaseAttackPower);
-            Assert.AreEqual(expectedDefense, entity.Stats.BaseDefensePower);
-            Assert.AreEqual(expectedSpeed, entity.Stats.BaseSpeed);
+            Assert.AreEqual(expectedAttack, _entity.Stats.BaseAttackPower);
+            Assert.AreEqual(expectedDefense, _entity.Stats.BaseDefensePower);
+            Assert.AreEqual(expectedSpeed, _entity.Stats.BaseSpeed);
         }
 
         [TestCase(1, ExpectedResult = 75)]
@@ -47,10 +47,10 @@ namespace SimpleGameTests.EngineTests
             };
 
             //Act
-            dyingEntity.HandleDeath(entity);
+            dyingEntity.HandleDeath(_entity);
 
             //Assert
-            return entity.Stats.Experience;
+            return _entity.Stats.Experience;
         }
 
     }
