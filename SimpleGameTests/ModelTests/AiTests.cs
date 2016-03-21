@@ -31,10 +31,10 @@ namespace SimpleGameTests.ModelTests
             //Arrange
             _entity.Location = new Point(3, 3);
             var startingPoint = new Point(3, 3);
-            var entity = new Enemy(_map, new Sentry(false, _entity, null));
+            var entity = new Sentry(false, _map);
             var entityManager = new Mock<IEntityManager>();
             //Act
-            entity.Ai.Act(_map, new Point(4,4), entityManager.Object, null);
+            entity.Act(new Point(4,4), entityManager.Object);
             //Assert
             Assert.AreEqual(startingPoint, _entity.Location);
         }

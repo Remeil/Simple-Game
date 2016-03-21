@@ -3,25 +3,24 @@ using RogueSharp;
 
 namespace SimpleGame.Models.EnemyAI
 {
-    public class Sentry : IAi
+    public class Sentry : Enemy
     {
         private bool _alerted;
-        private readonly BaseEntity _entity;
         private const int VisionRange = 12;
         private Point _investigationLocation;
 
-        public Sentry(bool alerted, BaseEntity entity, Point investigationLocation = null)
+        public Sentry(bool alerted, IMap map, Point investigationLocation = null)
+            : base(map)
         {
             _alerted = alerted;
-            _entity = entity;
             _investigationLocation = investigationLocation;
         }
 
-        public void Act(IMap map, Point playerLocation, IEntityManager manager, PathFinder pathfinder)
+        public override void Act(Point playerLocation, IEntityManager manager)
         {
             bool isInView = false;
-            map.ComputeFov(playerLocation.X, playerLocation.Y, VisionRange, false);
-            if (map.IsInFov(playerLocation.X, playerLocation.Y))
+            Map.ComputeFov(this.Location.X, this.Location.Y, VisionRange, false);
+            if (Map.IsInFov(playerLocation.X, playerLocation.Y))
             {
                 _alerted = true;
                 isInView = true;
@@ -30,11 +29,11 @@ namespace SimpleGame.Models.EnemyAI
 
             if (isInView)
             {
-                ChasePlayer(playerLocation, map, manager, pathfinder);
+                ChasePlayer(playerLocation, manager);
             }
             else if (_alerted)
             {
-                ChasePlayer(_investigationLocation, map, manager, pathfinder);
+                ChasePlayer(_investigationLocation, manager);
             }
             else
             {
@@ -42,14 +41,14 @@ namespace SimpleGame.Models.EnemyAI
             }
         }
 
-        private void ChasePlayer(Point playerLocation, IMap map, IEntityManager entities, PathFinder pathfinder)
+        private void ChasePlayer(Point playerLocation, IEntityManager entities)
         {
-            var nextSquare = pathfinder.ShortestPath(map.GetCell(playerLocation.X, playerLocation.Y), map.GetCell(playerLocation.X, playerLocation.Y)).FirstOrDefault();
+            var nextSquare = Pathfinder.ShortestPath(Map.GetCell(playerLocation.X, playerLocation.Y), Map.GetCell(playerLocation.X, playerLocation.Y)).FirstOrDefault();
             if (nextSquare == null)
             {
                 return;
             }
-            _entity.MoveOrAttack(map, entities, new Point(nextSquare.X, nextSquare.Y));
+            this.MoveOrAttack(Map, entities, new Point(nextSquare.X, nextSquare.Y));
         }
     }
 }

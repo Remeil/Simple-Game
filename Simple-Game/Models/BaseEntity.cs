@@ -65,7 +65,7 @@ namespace SimpleGame.Models
                     entities.RemoveEntity(otherEntity);
                     otherEntity.HandleDeath(this);
                     var square = map.GetRandomWalkableCell();
-                    entities.Entities.Add(new Enemy(map, new Sentry(false, this)) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
+                    entities.Entities.Add(new Sentry(false, Map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
                 }
                 return true;
             }

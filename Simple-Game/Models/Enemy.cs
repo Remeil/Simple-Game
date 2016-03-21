@@ -1,26 +1,20 @@
 ﻿using System.Linq;
 using RogueSharp;
+using SimpleGame.Enumerators;
 using SimpleGame.Models.EnemyAI;
 
 namespace SimpleGame.Models
 {
-    public class Enemy : BaseEntity
+    public abstract class Enemy : BaseEntity, IAi
     {
-        public readonly IAi Ai;
-
-        public Enemy(IMap map, IAi ai)
+        protected Enemy(IMap map)
         {
-            Ai = ai;
             Stats = new StatBlock(0, 0, 0, 0, 0, 0, 0, 0);
             WeaponDamage = 8;
             ArmorBlock = 2;
             Map = map;
             Pathfinder = new PathFinder(map);
-        }
-
-        public void HandleTurn(Player player, IMap map, EntityManager entities)
-        {
-            Ai.Act(map, player.Location, entities, Pathfinder);
+            EntityTeam = EntityTeam.Enemy;
         }
 
         public void GoToPoint(int destX, int destY)
@@ -29,5 +23,7 @@ namespace SimpleGame.Models
             Location.X = nextSquare.X;
             Location.Y = nextSquare.Y;
         }
+
+        public abstract void Act(Point playerLocation, IEntityManager manager);
     }
 }

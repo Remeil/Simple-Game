@@ -105,7 +105,7 @@ namespace SimpleGame.Engine
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            var enemy = new Enemy(_map, new Sentry(false, null))
+            var enemy = new Sentry(false, _map)
             {
                 Location = new Point(otherStartingLoc.X, otherStartingLoc.Y),
                 Scale = 0.5f,
@@ -171,7 +171,7 @@ namespace SimpleGame.Engine
                 if (enemy != null)
                 {
                     var entity = enemy;
-                    entity.HandleTurn(_player, _map, _entityManager);
+                    entity.Act(_player.Location, _entityManager);
                     enemy.Timer += 1000;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
@@ -223,7 +223,7 @@ namespace SimpleGame.Engine
                 }
                 else
                 {
-                    if (entity is Player)
+                    if (entity is Player && !entity.IsAlive)
                     {
                         Console.WriteLine("GG RITO");
                         Thread.Sleep(2000);
