@@ -202,6 +202,7 @@ namespace SimpleGame.Engine
             const int sizeOfSprites = 32;
             const float scale = .5f;
 
+            _map.UpdatePlayerFieldOfView(_player);
             _map.DrawMap(_spriteBatch, _textures, sizeOfSprites, scale);
 
             HandleEntities();

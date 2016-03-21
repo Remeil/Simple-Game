@@ -22,10 +22,12 @@ namespace SimpleGame.Models
         public decimal ArmorBlock { get; set; }
         public int Timer { get; set; }
         public EntityTeam EntityTeam { get; set; }
+        public int LightRadius { get; set; }
 
         public BaseEntity()
         {
             Location = new Point();
+            LightRadius = 12;
         }
 
         public bool IsAlive
@@ -65,7 +67,7 @@ namespace SimpleGame.Models
                     entities.RemoveEntity(otherEntity);
                     otherEntity.HandleDeath(this);
                     var square = map.GetRandomWalkableCell();
-                    entities.Entities.Add(new Sentry(false, Map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
+                    entities.Entities.Add(new Sentry(false, map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
                 }
                 return true;
             }

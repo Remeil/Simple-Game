@@ -10,13 +10,13 @@ namespace SimpleGameTests.ModelTests
     public class AiTests
     {
         private IMap _map;
-        private BaseEntity _entity;
+        private Mock<IEntityManager> _entityManager;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            _map = new BorderOnlyMapCreationStrategy<Map>(5, 5).CreateMap();
-            _entity = new BaseEntity();
+            _map = new StringDeserializeMapCreationStrategy<Map>("#####\n#...#\n#####\n#...#\n#####").CreateMap();
+            _entityManager = new Mock<IEntityManager>();
         }
 
         [SetUp]
@@ -29,14 +29,25 @@ namespace SimpleGameTests.ModelTests
         public void Sentry_DoesntKnowWherePlayerIs_StandsStill()
         {
             //Arrange
-            _entity.Location = new Point(3, 3);
-            var startingPoint = new Point(3, 3);
-            var entity = new Sentry(false, _map);
-            var entityManager = new Mock<IEntityManager>();
+            var expectedEnd = new Point(1, 1);
+            var entity = new Sentry(false, _map) {Location = new Point(1, 1)};
             //Act
-            entity.Act(new Point(4,4), entityManager.Object);
+            entity.Act(new Point(3, 3), _entityManager.Object);
             //Assert
-            Assert.AreEqual(startingPoint, _entity.Location);
+            Assert.AreEqual(expectedEnd, entity.Location);
+        }
+
+        [Test]
+        public void Sentry_KnowsWherePlayerIs_PursuesThem()
+        {
+            //Arrange
+            var expectedEnd = new Point(2, 1);
+            var playerPoint = new Point(3, 1);
+            var entity = new Sentry(true, _map, playerPoint) {Location = new Point(1, 1)};
+            //Act
+            entity.Act(playerPoint, _entityManager.Object);
+            //Assert
+            Assert.AreEqual(expectedEnd, entity.Location);
         }
     }
 }

@@ -6,7 +6,6 @@ namespace SimpleGame.Models.EnemyAI
     public class Sentry : Enemy
     {
         private bool _alerted;
-        private const int VisionRange = 12;
         private Point _investigationLocation;
 
         public Sentry(bool alerted, IMap map, Point investigationLocation = null)
@@ -14,12 +13,13 @@ namespace SimpleGame.Models.EnemyAI
         {
             _alerted = alerted;
             _investigationLocation = investigationLocation;
+            LightRadius = 8;
         }
 
         public override void Act(Point playerLocation, IEntityManager manager)
         {
             bool isInView = false;
-            Map.ComputeFov(this.Location.X, this.Location.Y, VisionRange, false);
+            Map.ComputeFov(this.Location.X, this.Location.Y, LightRadius, false);
             if (Map.IsInFov(playerLocation.X, playerLocation.Y))
             {
                 _alerted = true;
@@ -43,7 +43,7 @@ namespace SimpleGame.Models.EnemyAI
 
         private void ChasePlayer(Point playerLocation, IEntityManager entities)
         {
-            var nextSquare = Pathfinder.ShortestPath(Map.GetCell(playerLocation.X, playerLocation.Y), Map.GetCell(playerLocation.X, playerLocation.Y)).FirstOrDefault();
+            var nextSquare = Pathfinder.ShortestPath(Map.GetCell(Location.X, Location.Y), Map.GetCell(playerLocation.X, playerLocation.Y)).FirstOrDefault();
             if (nextSquare == null)
             {
                 return;
