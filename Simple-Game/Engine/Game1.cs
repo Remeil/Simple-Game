@@ -7,8 +7,8 @@ using EmptyKeys.UserInterface.Media;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.EnemyAI;
 using SimpleGame.Models;
-using SimpleGame.Models.EnemyAI;
 using Point = RogueSharp.Point;
 
 namespace SimpleGame.Engine

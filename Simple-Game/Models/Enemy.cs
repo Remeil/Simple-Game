@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using RogueSharp;
+using SimpleGame.EnemyAI;
 using SimpleGame.Enumerators;
-using SimpleGame.Models.EnemyAI;
 
 namespace SimpleGame.Models
 {

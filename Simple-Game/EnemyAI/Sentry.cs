@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using RogueSharp;
+using SimpleGame.Models;
 
-namespace SimpleGame.Models.EnemyAI
+namespace SimpleGame.EnemyAI
 {
     public class Sentry : Enemy
     {

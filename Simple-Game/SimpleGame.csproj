@@ -82,8 +82,8 @@
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Enumerators\CombatType.cs" />
     <Compile Include="Models\Enemy.cs" />
-    <Compile Include="Models\EnemyAI\IAi.cs" />
-    <Compile Include="Models\EnemyAI\Sentry.cs" />
+    <Compile Include="EnemyAI\IAi.cs" />
+    <Compile Include="EnemyAI\Sentry.cs" />
     <Compile Include="Models\EntityManager.cs" />
     <Compile Include="Models\IEntityManager.cs" />
     <Compile Include="Models\Inventory.cs" />

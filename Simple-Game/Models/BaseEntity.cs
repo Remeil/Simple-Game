@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.EnemyAI;
 using SimpleGame.Engine;
 using SimpleGame.Enumerators;
-using SimpleGame.Models.EnemyAI;
 using Point = RogueSharp.Point;
 
 namespace SimpleGame.Models
