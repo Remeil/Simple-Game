@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SimpleGame.Enumerators;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
 namespace SimpleGameTests.ModelTests
 {

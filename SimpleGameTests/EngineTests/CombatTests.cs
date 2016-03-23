@@ -3,7 +3,9 @@ using NUnit.Framework;
 using RogueSharp.Random;
 using SimpleGame.Engine;
 using SimpleGame.Enumerators;
+using SimpleGame.Helpers;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
 namespace SimpleGameTests.EngineTests
 {

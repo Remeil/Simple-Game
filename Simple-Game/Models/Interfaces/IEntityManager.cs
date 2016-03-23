@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using RogueSharp;
+using SimpleGame.Models.Entities;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Interfaces
 {
     public interface IEntityManager
     {

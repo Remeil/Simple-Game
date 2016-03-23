@@ -74,20 +74,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\CombatMethods.cs" />
-    <Compile Include="Engine\InputState.cs" />
-    <Compile Include="Engine\MapMethods.cs" />
+    <Compile Include="Helpers\CombatMethods.cs" />
+    <Compile Include="Helpers\InputState.cs" />
+    <Compile Include="Helpers\MapMethods.cs" />
     <Compile Include="Enumerators\EntityTeam.cs" />
     <Compile Include="Enumerators\Stat.cs" />
-    <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\Entities\BaseEntity.cs" />
     <Compile Include="Enumerators\CombatType.cs" />
-    <Compile Include="Models\Enemy.cs" />
-    <Compile Include="EnemyAI\IAi.cs" />
-    <Compile Include="EnemyAI\Sentry.cs" />
+    <Compile Include="Models\Entities\Enemy.cs" />
+    <Compile Include="Models\Interfaces\IAi.cs" />
+    <Compile Include="Models\Entities\AI\Sentry.cs" />
     <Compile Include="Models\EntityManager.cs" />
-    <Compile Include="Models\IEntityManager.cs" />
+    <Compile Include="Models\Interfaces\IEntityManager.cs" />
     <Compile Include="Models\Inventory.cs" />
-    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Entities\Player.cs" />
     <Compile Include="Engine\Game1.cs" />
     <Compile Include="Engine\Main.cs" />
     <Compile Include="Models\StatBlock.cs" />

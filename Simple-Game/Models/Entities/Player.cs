@@ -2,9 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
+using SimpleGame.Helpers;
 using Point = RogueSharp.Point;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Entities
 {
     public class Player : BaseEntity
     {
@@ -34,23 +35,24 @@ namespace SimpleGame.Models
 
         public bool HandleInput(InputState inputState, IMap map, EntityManager entities)
         {
+            var point = new Point(Location.X, Location.Y);
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                return MoveOrAttack(map, entities, new Point(Location.X - 1, Location.Y));
+                point.X--;
             }
             else if (inputState.IsRight(null))
             {
-                return MoveOrAttack(map, entities, new Point(Location.X + 1, Location.Y));
+                point.X++;
             }
             else if (inputState.IsUp(null))
             {
-                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y - 1));
+                point.Y--;
             }
             else if (inputState.IsDown(null))
             {
-                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y + 1));
+                point.Y++;
             }
-            return false;
+            return MoveOrAttack(map, entities, point);
         }
     }
 }

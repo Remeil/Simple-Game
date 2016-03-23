@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
-using SimpleGame.EnemyAI;
 using SimpleGame.Engine;
 using SimpleGame.Enumerators;
+using SimpleGame.Helpers;
+using SimpleGame.Models.Entities.AI;
+using SimpleGame.Models.Interfaces;
 using Point = RogueSharp.Point;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Entities
 {
     public class BaseEntity
     {
@@ -35,10 +37,10 @@ namespace SimpleGame.Models
             get { return Stats.CurrentHp > 0; }
         }
 
-        public void TakeDamage(decimal damage, string name)
+        public string TakeDamage(decimal damage, string name)
         {
             Stats.CurrentHp -= damage;
-            Console.WriteLine(name + " has dealt " + damage + " damage to " + Name);
+            return name + " has dealt " + damage + " damage to " + Name;
         }
 
         public virtual bool Move(Point coord, IMap map)
@@ -130,17 +132,18 @@ namespace SimpleGame.Models
             }
         }
 
-        public void HandleDeath(BaseEntity killer)
+        public string HandleDeath(BaseEntity killer)
         {
             var levelDifference = this.Stats.Level - killer.Stats.Level;
             var baseExperience = this.Stats.Level * 75;
             var grantedExperience = baseExperience * (Math.Pow(1.1,levelDifference));
             killer.GrantExperience((long) grantedExperience);
-            Console.WriteLine(killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.");
+            return killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.";
         }
 
-        private void GrantExperience(long grantedExperience)
+        private string GrantExperience(long grantedExperience)
         {
+            string outString = "";
             Stats.Experience += grantedExperience;
             var level = Stats.Level;
             var requiredExp = 500 * Math.Pow(level, 2) + 500*level;
@@ -150,10 +153,11 @@ namespace SimpleGame.Models
                 LevelUp(Stat.Attack, Stat.Hp, Stat.Defense);
                 Stats.Experience -= (long) requiredExp;
                 Stats.Level += 1;
-                Console.WriteLine("Level Up!");
+                outString += "Level Up! \n";
             }
             requiredExp = 500 * Math.Pow(level, 2) + 500 * level;
-            Console.WriteLine(Name + ": " + Stats.Experience + " / " + requiredExp);
+            outString += Name + ": " + Stats.Experience + " / " + requiredExp;
+            return outString;
         }
     }
 }

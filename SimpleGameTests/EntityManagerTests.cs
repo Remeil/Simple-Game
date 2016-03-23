@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using RogueSharp;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
 namespace SimpleGameTests
 {

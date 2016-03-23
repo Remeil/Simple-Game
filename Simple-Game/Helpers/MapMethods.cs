@@ -6,8 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using RogueSharp.Random;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
-namespace SimpleGame.Engine
+namespace SimpleGame.Helpers
 {
     public static class MapExtensions
     {

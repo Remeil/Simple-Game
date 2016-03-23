@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using RogueSharp;
-using SimpleGame.EnemyAI;
 using SimpleGame.Enumerators;
+using SimpleGame.Models.Interfaces;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Entities
 {
     public abstract class Enemy : BaseEntity, IAi
     {

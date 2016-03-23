@@ -1,8 +1,9 @@
 ﻿using Moq;
 using NUnit.Framework;
 using RogueSharp;
-using SimpleGame.EnemyAI;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities.AI;
+using SimpleGame.Models.Interfaces;
 
 namespace SimpleGameTests.ModelTests
 {

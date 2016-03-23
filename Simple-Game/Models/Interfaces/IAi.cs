@@ -1,7 +1,6 @@
 ﻿using RogueSharp;
-using SimpleGame.Models;
 
-namespace SimpleGame.EnemyAI
+namespace SimpleGame.Models.Interfaces
 {
     public interface IAi
     {

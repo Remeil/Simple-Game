@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 using RogueSharp;
+using SimpleGame.Models.Entities;
+using SimpleGame.Models.Interfaces;
 
 namespace SimpleGame.Models
 {
