@@ -119,8 +119,22 @@ namespace SimpleGame.Engine
                 Name = "Big Bad"
             };
 
+            Cell thirdStartingLoc = _map.GetRandomWalkableCell();
+            var enemy2 = new Tracker(_map)
+            {
+                Location = new Point(thirdStartingLoc.X, thirdStartingLoc.Y),
+                Scale = 0.5f,
+                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                WeaponDamage = 2,
+                ArmorBlock = 0,
+                Stats = new StatBlock(),
+                Timer = 100,
+                Name = "Big Bad 2 - Tracker"
+            };
+
             _entityManager.Entities.Add(_player);
             _entityManager.Entities.Add(enemy);
+            _entityManager.Entities.Add(enemy2);
 
             //Set starting FOV
             _map.UpdatePlayerFieldOfView(_player);
