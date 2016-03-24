@@ -5,19 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ek="clr-namespace:EmptyKeys.UserInterface.Designer;assembly=EmptyKeys.UserInterface.Designer"
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="800">
+             d:DesignHeight="480" d:DesignWidth="800">
     <Grid>
-        <TextBlock Margin="0,525,777,0">HP:</TextBlock>
-        <TextBlock TextAlignment="Right" x:Name="CurrentHp" Text="{Binding CurrentHp, Mode=OneWay}" Margin="28,524,736,0"></TextBlock>
-        <TextBlock TextAlignment="Center" Margin="69,524,717,0">/</TextBlock>
-        <TextBlock TextAlignment="Right" x:Name="MaxHp" Text="{Binding MaxHp, Mode=OneWay}" Margin="88,524,676,0"></TextBlock>
-        <TextBlock Margin="129,524,648,0">MP:</TextBlock>
-        <TextBlock TextAlignment="Right" x:Name="CurrentMp" Text="{Binding CurrentMp, Mode=OneWay}" Margin="157,524,607,0"></TextBlock>
-        <TextBlock TextAlignment="Center" Margin="198,524,588,0">/</TextBlock>
-        <TextBlock TextAlignment="Right" x:Name="MaxMp" Text="{Binding MaxMp, Mode=OneWay}" Margin="217,524,547,0"></TextBlock>
-        <Border BorderBrush="LightGray" BorderThickness="1" Margin="16,56,16,16"/>
-        <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="41" Margin="16,10,0,0" VerticalAlignment="Top" Width="768">
-            <TextBlock TextWrapping="Wrap" x:Name="SystemMessages" Text="{Binding SystemMessages, Mode=OneWay}"/>
-        </Border>
+        <TextBlock Margin="0,464,777,0">HP:</TextBlock>
+        <TextBlock TextAlignment="Right" x:Name="CurrentHp" Text="{Binding CurrentHp, Mode=OneWay}" Margin="28,464,736,0"></TextBlock>
+        <TextBlock TextAlignment="Center" Margin="69,464,717,0">/</TextBlock>
+        <TextBlock TextAlignment="Right" x:Name="MaxHp" Text="{Binding MaxHp, Mode=OneWay}" Margin="88,464,676,0"></TextBlock>
+        <TextBlock Margin="129,464,648,0">MP:</TextBlock>
+        <TextBlock TextAlignment="Right" x:Name="CurrentMp" Text="{Binding CurrentMp, Mode=OneWay}" Margin="157,464,607,0"></TextBlock>
+        <TextBlock TextAlignment="Center" Margin="198,464,588,0">/</TextBlock>
+        <TextBlock TextAlignment="Right" x:Name="MaxMp" Text="{Binding MaxMp, Mode=OneWay}" Margin="217,464,547,0"></TextBlock>
+        <Border BorderBrush="LightGray" BorderThickness="1" Margin="16"/>
     </Grid>
 </ek:UIRoot>
