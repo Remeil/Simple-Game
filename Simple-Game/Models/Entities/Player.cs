@@ -35,24 +35,23 @@ namespace SimpleGame.Models.Entities
 
         public bool HandleInput(InputState inputState, IMap map, EntityManager entities)
         {
-            var point = new Point(Location.X, Location.Y);
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                point.X--;
+                return MoveOrAttack(map, entities, new Point(Location.X - 1, Location.Y));
             }
             else if (inputState.IsRight(null))
             {
-                point.X++;
+                return MoveOrAttack(map, entities, new Point(Location.X + 1, Location.Y));
             }
             else if (inputState.IsUp(null))
             {
-                point.Y--;
+                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y - 1));
             }
             else if (inputState.IsDown(null))
             {
-                point.Y++;
+                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y + 1));
             }
-            return MoveOrAttack(map, entities, point);
+            return false;
         }
     }
 }
