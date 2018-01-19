@@ -101,7 +101,7 @@ namespace SimpleGame.Engine
                 Sprite = Content.Load<Texture2D>("Player.png"),
                 WeaponDamage = 10,
                 ArmorBlock = 4,
-                Stats = new StatBlock(),
+                Stats = new StatBlock() {BaseSpeed = 30},
                 Timer = 0,
                 Name = "Player"
             };
@@ -111,12 +111,12 @@ namespace SimpleGame.Engine
             {
                 Location = new Point(otherStartingLoc.X, otherStartingLoc.Y),
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                Sprite = Content.Load<Texture2D>("Enemies/Sentry.png"),
                 WeaponDamage = 8,
                 ArmorBlock = 2,
                 Stats = new StatBlock(),
                 Timer = 5000,
-                Name = "Big Bad"
+                Name = "Sentry"
             };
 
             Cell thirdStartingLoc = _map.GetRandomWalkableCell();
@@ -124,12 +124,12 @@ namespace SimpleGame.Engine
             {
                 Location = new Point(thirdStartingLoc.X, thirdStartingLoc.Y),
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                Sprite = Content.Load<Texture2D>("Enemies/Tracker.png"),
                 WeaponDamage = 2,
                 ArmorBlock = 0,
                 Stats = new StatBlock(),
                 Timer = 100,
-                Name = "Big Bad 2 - Tracker"
+                Name = "Tracker"
             };
 
             _entityManager.Entities.Add(_player);
@@ -176,7 +176,6 @@ namespace SimpleGame.Engine
                 if (entity.HandleInput(_inputState, _map, _entityManager))
                 {
                     _map.UpdatePlayerFieldOfView(_player);
-                    player.Timer += 800;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }
@@ -188,7 +187,6 @@ namespace SimpleGame.Engine
                 {
                     var entity = enemy;
                     entity.Act(_player.Location, _entityManager);
-                    enemy.Timer += 1000;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }

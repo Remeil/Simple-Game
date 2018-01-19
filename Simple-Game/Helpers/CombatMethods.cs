@@ -16,6 +16,7 @@ namespace SimpleGame.Helpers
 
         public static string MakeMeleeAttack(this BaseEntity attacker, BaseEntity defender)
         {
+            attacker.AdjustTimer(1000);
             if (attacker.TryToHit(defender, CombatType.Melee))
             {
                 return defender.TakeDamage(attacker.CalculateDamageOn(defender), attacker.Name);

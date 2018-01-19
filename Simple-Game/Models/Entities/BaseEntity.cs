@@ -51,11 +51,17 @@ namespace SimpleGame.Models.Entities
                 var yDist = Math.Abs(coord.Y - Location.Y);
                 if (xDist <= 1 && yDist <= 1 && xDist + yDist < 2)
                 {
+                    AdjustTimer(850);
                     Location = coord;
                     return true;
                 }
             }
             return false;
+        }
+
+        public virtual void Wait()
+        {
+            AdjustTimer(250, false);
         }
 
         public bool MoveOrAttack(IMap map, IEntityManager entities, Point loc)
@@ -69,7 +75,7 @@ namespace SimpleGame.Models.Entities
                     entities.RemoveEntity(otherEntity);
                     otherEntity.HandleDeath(this);
                     var square = map.GetRandomWalkableCell();
-                    entities.Entities.Add(new Sentry(false, map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad" });
+                    entities.Entities.Add(new Sentry(false, map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Sentry" });
                 }
                 return true;
             }
@@ -139,6 +145,18 @@ namespace SimpleGame.Models.Entities
             var grantedExperience = baseExperience * (Math.Pow(1.1,levelDifference));
             killer.GrantExperience((long) grantedExperience);
             return killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.";
+        }
+
+        public void AdjustTimer(int timeTaken, bool speedEffective = true)
+        {
+            if (speedEffective)
+            {
+                Timer += (int)(timeTaken * (100.0 / (100 + Stats.Speed)));
+            }
+            else
+            {
+                Timer += timeTaken;
+            }
         }
 
         private string GrantExperience(long grantedExperience)

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using RogueSharp;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 using SimpleGame.Models.Entities.AI;
 using SimpleGame.Models.Interfaces;
 
@@ -47,6 +48,25 @@ namespace SimpleGameTests.ModelTests
             var entity = new Sentry(true, _map, playerPoint) {Location = new Point(1, 1)};
             //Act
             entity.Act(playerPoint, _entityManager.Object);
+            //Assert
+            Assert.AreEqual(expectedEnd, entity.Location);
+        }
+
+        [Test]
+        public void Sentry_LostPlayer_ReturnsToPost()
+        {
+            //Arrange
+            var expectedEnd = new Point(2, 1);
+            var playerPoint = new Point(3, 3);
+            var entity = new Sentry(false, _map, playerPoint) {Location = new Point(2, 1)};
+            
+            entity.Act(playerPoint, _entityManager.Object);
+
+            entity.Location = new Point(1, 1);
+
+            //Act
+            entity.Act(playerPoint, _entityManager.Object);
+
             //Assert
             Assert.AreEqual(expectedEnd, entity.Location);
         }

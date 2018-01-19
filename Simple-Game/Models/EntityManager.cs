@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MoreLinq;
 using RogueSharp;
 using SimpleGame.Models.Entities;
@@ -25,6 +26,8 @@ namespace SimpleGame.Models
                 Console.WriteLine("HP: " + entity.Stats.CurrentHp);
             }
             Console.WriteLine();
+
+            Thread.Sleep(16);
         }
 
         public BaseEntity GetNextEntity()

@@ -42,8 +42,8 @@ namespace SimpleGame.Models
                 var oldBaseHp = _baseHp;
                 _baseHp = value;
                 _currentHp += (_baseHp - oldBaseHp) * HpMult;
-                OnPropertyChanged("MaxHp");
-                OnPropertyChanged("CurrentHp");
+                OnPropertyChanged(nameof(MaxHp));
+                OnPropertyChanged(nameof(CurrentHp));
             }
         }
 

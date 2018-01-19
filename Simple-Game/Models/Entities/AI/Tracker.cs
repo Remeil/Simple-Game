@@ -68,6 +68,10 @@ namespace SimpleGame.Models.Entities.AI
             {
                 ChasePlayer(_investigationPoint, manager);
             }
+            else
+            {
+                Wait();
+            }
         }
 
         private void ChasePlayer(Point playerLocation, IEntityManager entities)
