@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
+using SimpleGame.Helpers;
+using Point = RogueSharp.Point;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Entities
 {
     public class Player : BaseEntity
     {
@@ -21,7 +23,7 @@ namespace SimpleGame.Models
         public override void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
+            spriteBatch.Draw(Sprite, new Vector2(Location.X * multiplier + 16, Location.Y * multiplier + 16),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.5f);
         }
@@ -35,19 +37,19 @@ namespace SimpleGame.Models
         {
             if (inputState.IsLeft(PlayerIndex.One))
             {
-                return MoveOrAttack(map, entities, X - 1, Y);
+                return MoveOrAttack(map, entities, new Point(Location.X - 1, Location.Y));
             }
             else if (inputState.IsRight(null))
             {
-                return MoveOrAttack(map, entities, X + 1, Y);
+                return MoveOrAttack(map, entities, new Point(Location.X + 1, Location.Y));
             }
             else if (inputState.IsUp(null))
             {
-                return MoveOrAttack(map, entities, X, Y - 1);
+                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y - 1));
             }
             else if (inputState.IsDown(null))
             {
-                return MoveOrAttack(map, entities, X, Y + 1);
+                return MoveOrAttack(map, entities, new Point(Location.X, Location.Y + 1));
             }
             return false;
         }

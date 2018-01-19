@@ -7,7 +7,11 @@ using EmptyKeys.UserInterface.Media;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
+using SimpleGame.Helpers;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
+using SimpleGame.Models.Entities.AI;
+using Point = RogueSharp.Point;
 
 namespace SimpleGame.Engine
 {
@@ -92,33 +96,45 @@ namespace SimpleGame.Engine
             Cell startingLoc = _map.GetRandomWalkableCell();
             _player = new Player
             {
-                X = startingLoc.X,
-                Y = startingLoc.Y,
+                Location = new Point(startingLoc.X, startingLoc.Y),
                 Scale = 0.5f,
                 Sprite = Content.Load<Texture2D>("Player.png"),
                 WeaponDamage = 10,
                 ArmorBlock = 4,
-                Stats = new StatBlock(),
+                Stats = new StatBlock() {BaseSpeed = 30},
                 Timer = 0,
                 Name = "Player"
             };
 
             Cell otherStartingLoc = _map.GetRandomWalkableCell();
-            var enemy = new Enemy(_map)
+            var enemy = new Sentry(false, _map)
             {
-                X = otherStartingLoc.X,
-                Y = otherStartingLoc.Y,
+                Location = new Point(otherStartingLoc.X, otherStartingLoc.Y),
                 Scale = 0.5f,
-                Sprite = Content.Load<Texture2D>("Enemy.png"),
+                Sprite = Content.Load<Texture2D>("Enemies/Sentry.png"),
                 WeaponDamage = 8,
                 ArmorBlock = 2,
                 Stats = new StatBlock(),
                 Timer = 5000,
-                Name = "Big Bad"
+                Name = "Sentry"
+            };
+
+            Cell thirdStartingLoc = _map.GetRandomWalkableCell();
+            var enemy2 = new Tracker(_map)
+            {
+                Location = new Point(thirdStartingLoc.X, thirdStartingLoc.Y),
+                Scale = 0.5f,
+                Sprite = Content.Load<Texture2D>("Enemies/Tracker.png"),
+                WeaponDamage = 2,
+                ArmorBlock = 0,
+                Stats = new StatBlock(),
+                Timer = 100,
+                Name = "Tracker"
             };
 
             _entityManager.Entities.Add(_player);
             _entityManager.Entities.Add(enemy);
+            _entityManager.Entities.Add(enemy2);
 
             //Set starting FOV
             _map.UpdatePlayerFieldOfView(_player);
@@ -160,7 +176,6 @@ namespace SimpleGame.Engine
                 if (entity.HandleInput(_inputState, _map, _entityManager))
                 {
                     _map.UpdatePlayerFieldOfView(_player);
-                    player.Timer += 800;
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }
@@ -171,8 +186,7 @@ namespace SimpleGame.Engine
                 if (enemy != null)
                 {
                     var entity = enemy;
-                    entity.HandleTurn(_player, _map, _entityManager);
-                    enemy.Timer += 1000;
+                    entity.Act(_player.Location, _entityManager);
                     _entityManager.UpdateTimers();
                     _entityManager.Debug();
                 }
@@ -202,6 +216,7 @@ namespace SimpleGame.Engine
             const int sizeOfSprites = 32;
             const float scale = .5f;
 
+            _map.UpdatePlayerFieldOfView(_player);
             _map.DrawMap(_spriteBatch, _textures, sizeOfSprites, scale);
 
             HandleEntities();
@@ -223,7 +238,7 @@ namespace SimpleGame.Engine
                 }
                 else
                 {
-                    if (entity is Player)
+                    if (entity is Player && !entity.IsAlive)
                     {
                         Console.WriteLine("GG RITO");
                         Thread.Sleep(2000);

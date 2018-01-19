@@ -29,7 +29,7 @@ namespace SimpleGame.Models
         private decimal currentMp;
         private decimal maxMp;
 
-        public List<string> SystemMessages { get { return systemMessages; } set { OnPropertyChanged(); systemMessages = value; } }
+        public List<string> SystemMessages { get { return systemMessages; } set { systemMessages = value; OnPropertyChanged(); } }
 
         public new decimal CurrentHp { get { return currentHp; } set { currentHp = value; OnPropertyChanged(); } }
         public new decimal MaxHp { get { return maxHp; } set { maxHp = value; OnPropertyChanged(); } }

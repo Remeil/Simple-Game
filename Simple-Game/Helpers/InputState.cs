@@ -10,7 +10,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace SimpleGame.Engine
+namespace SimpleGame.Helpers
 {
    /// <summary>
    ///    Helper for reading input from keyboard, gamepad, and touch input. This class

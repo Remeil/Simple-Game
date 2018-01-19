@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using RogueSharp;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
 namespace SimpleGameTests
 {
@@ -21,9 +23,9 @@ namespace SimpleGameTests
         [SetUp]
         public void Setup()
         {
-            Entity1 = new BaseEntity {X = 1, Y = 1, Timer = 1000, Name = "First"};
-            Entity2 = new BaseEntity {X = 2, Y = 2, Timer = 1500, Name = "Middle"};
-            Entity3 = new BaseEntity {X = 3, Y = 3, Timer = 2000, Name = "Last"};
+            Entity1 = new BaseEntity {Location = new Point(1, 1), Timer = 1000, Name = "First"};
+            Entity2 = new BaseEntity {Location = new Point(2, 2), Timer = 1500, Name = "Middle" };
+            Entity3 = new BaseEntity {Location = new Point(3, 3), Timer = 2000, Name = "Last"};
             EntityManager.Entities = new HashSet<BaseEntity>
             {
                 Entity1, Entity2, Entity3
@@ -64,7 +66,7 @@ namespace SimpleGameTests
             //Arrange
             //Act
             var expected = Entity1;
-            var actual = EntityManager.GetEntityInSquare(1, 1);
+            var actual = EntityManager.GetEntityInSquare(new Point(1, 1));
 
             //Assert
             Assert.AreSame(expected, actual);
@@ -75,7 +77,7 @@ namespace SimpleGameTests
         {
             //Arrange
             //Act
-            var actual = EntityManager.GetEntityInSquare(1, 3);
+            var actual = EntityManager.GetEntityInSquare(new Point(1, 3));
 
             //Assert
             Assert.IsNull(actual);

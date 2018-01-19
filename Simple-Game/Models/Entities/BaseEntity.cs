@@ -4,16 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using SimpleGame.Engine;
 using SimpleGame.Enumerators;
+using SimpleGame.Helpers;
+using SimpleGame.Models.Entities.AI;
+using SimpleGame.Models.Interfaces;
+using Point = RogueSharp.Point;
 
-namespace SimpleGame.Models
+namespace SimpleGame.Models.Entities
 {
     public class BaseEntity
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public Point Location { get; set; }
         public float Scale { get; set; }
         public Texture2D Sprite { get; set; }
-        public PathFinder PathFinder { get; set; }
+        public PathFinder Pathfinder { get; set; }
         public IMap Map { get; set; }
         public string Name { get; set; }
         public StatBlock Stats { get; set; }
@@ -21,37 +24,49 @@ namespace SimpleGame.Models
         public decimal ArmorBlock { get; set; }
         public int Timer { get; set; }
         public EntityTeam EntityTeam { get; set; }
+        public int LightRadius { get; set; }
+
+        public BaseEntity()
+        {
+            Location = new Point();
+            LightRadius = 12;
+        }
 
         public bool IsAlive
         {
             get { return Stats.CurrentHp > 0; }
         }
 
-        public void TakeDamage(decimal damage, string name)
+        public string TakeDamage(decimal damage, string name)
         {
             Stats.CurrentHp -= damage;
-            Console.WriteLine(name + " has dealt " + damage + " damage to " + Name);
+            return name + " has dealt " + damage + " damage to " + Name;
         }
 
-        public virtual bool Move(int xCoord, int yCoord, IMap map)
+        public virtual bool Move(Point coord, IMap map)
         {
-            if (map.IsWalkable(xCoord, yCoord))
+            if (map.IsWalkable(coord.X, coord.Y))
             {
-                var xDist = Math.Abs(xCoord - X);
-                var yDist = Math.Abs(yCoord - Y);
+                var xDist = Math.Abs(coord.X - Location.X);
+                var yDist = Math.Abs(coord.Y - Location.Y);
                 if (xDist <= 1 && yDist <= 1 && xDist + yDist < 2)
                 {
-                    X = xCoord;
-                    Y = yCoord;
+                    AdjustTimer(850);
+                    Location = coord;
                     return true;
                 }
             }
             return false;
         }
 
-        protected bool MoveOrAttack(IMap map, EntityManager entities, int x, int y)
+        public virtual void Wait()
         {
-            var otherEntity = entities.GetEntityInSquare(x, y);
+            AdjustTimer(250, false);
+        }
+
+        public bool MoveOrAttack(IMap map, IEntityManager entities, Point loc)
+        {
+            var otherEntity = entities.GetEntityInSquare(loc);
             if (otherEntity != null)
             {
                 this.MakeMeleeAttack(otherEntity);
@@ -60,25 +75,25 @@ namespace SimpleGame.Models
                     entities.RemoveEntity(otherEntity);
                     otherEntity.HandleDeath(this);
                     var square = map.GetRandomWalkableCell();
-                    entities.Entities.Add(new Enemy(map) { X = square.X, Y = square.Y, Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Big Bad"});
+                    entities.Entities.Add(new Sentry(false, map) { Location = new Point(square.X, square.Y), Sprite = otherEntity.Sprite, Scale = otherEntity.Scale, Name = "Sentry" });
                 }
                 return true;
             }
             else
             {
-                return Move(x, y, map);
+                return Move(loc, map);
             }
         }
 
         public bool IsVisible(IMap map)
         {
-            return map.IsInFov(X, Y);
+            return map.IsInFov(Location.X, Location.Y);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             float multiplier = Scale * Sprite.Width;
-            spriteBatch.Draw(Sprite, new Vector2(X * multiplier + 16, Y * multiplier + 16),
+            spriteBatch.Draw(Sprite, new Vector2(Location.X * multiplier + 16, Location.Y * multiplier + 16),
               null, null, null, 0.0f, new Vector2(Scale, Scale),
               Color.White, SpriteEffects.None, 0.4f);
         }
@@ -123,17 +138,30 @@ namespace SimpleGame.Models
             }
         }
 
-        public void HandleDeath(BaseEntity killer)
+        public string HandleDeath(BaseEntity killer)
         {
             var levelDifference = this.Stats.Level - killer.Stats.Level;
             var baseExperience = this.Stats.Level * 75;
             var grantedExperience = baseExperience * (Math.Pow(1.1,levelDifference));
             killer.GrantExperience((long) grantedExperience);
-            Console.WriteLine(killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.");
+            return killer.Name + " killed " + Name + " for " + (long)grantedExperience + " exp.";
         }
 
-        private void GrantExperience(long grantedExperience)
+        public void AdjustTimer(int timeTaken, bool speedEffective = true)
         {
+            if (speedEffective)
+            {
+                Timer += (int)(timeTaken * (100.0 / (100 + Stats.Speed)));
+            }
+            else
+            {
+                Timer += timeTaken;
+            }
+        }
+
+        private string GrantExperience(long grantedExperience)
+        {
+            string outString = "";
             Stats.Experience += grantedExperience;
             var level = Stats.Level;
             var requiredExp = 500 * Math.Pow(level, 2) + 500*level;
@@ -143,10 +171,11 @@ namespace SimpleGame.Models
                 LevelUp(Stat.Attack, Stat.Hp, Stat.Defense);
                 Stats.Experience -= (long) requiredExp;
                 Stats.Level += 1;
-                Console.WriteLine("Level Up!");
+                outString += "Level Up! \n";
             }
             requiredExp = 500 * Math.Pow(level, 2) + 500 * level;
-            Console.WriteLine(Name + ": " + Stats.Experience + " / " + requiredExp);
+            outString += Name + ": " + Stats.Experience + " / " + requiredExp;
+            return outString;
         }
     }
 }

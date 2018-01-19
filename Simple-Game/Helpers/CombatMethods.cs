@@ -1,9 +1,9 @@
 ﻿using System;
 using RogueSharp.Random;
 using SimpleGame.Enumerators;
-using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
-namespace SimpleGame.Engine
+namespace SimpleGame.Helpers
 {
     public static class CombatMethods
     {
@@ -14,15 +14,16 @@ namespace SimpleGame.Engine
             Random = new DotNetRandom();
         }
 
-        public static void MakeMeleeAttack(this BaseEntity attacker, BaseEntity defender)
+        public static string MakeMeleeAttack(this BaseEntity attacker, BaseEntity defender)
         {
+            attacker.AdjustTimer(1000);
             if (attacker.TryToHit(defender, CombatType.Melee))
             {
-                defender.TakeDamage(attacker.CalculateDamageOn(defender), attacker.Name);
+                return defender.TakeDamage(attacker.CalculateDamageOn(defender), attacker.Name);
             }
             else
             {
-                Console.WriteLine(attacker.Name + " missed an attack on " + defender.Name);
+                return attacker.Name + " missed an attack on " + defender.Name;
             }
         }
 

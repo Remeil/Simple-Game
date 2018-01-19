@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MoreLinq;
+using RogueSharp;
+using SimpleGame.Models.Entities;
+using SimpleGame.Models.Interfaces;
 
 namespace SimpleGame.Models
 {
-    public class EntityManager
+    public class EntityManager : IEntityManager
     {
         public EntityManager()
         {
@@ -22,6 +26,8 @@ namespace SimpleGame.Models
                 Console.WriteLine("HP: " + entity.Stats.CurrentHp);
             }
             Console.WriteLine();
+
+            Thread.Sleep(16);
         }
 
         public BaseEntity GetNextEntity()
@@ -29,9 +35,9 @@ namespace SimpleGame.Models
             return Entities.MinBy(entity => entity.Timer);
         }
 
-        public BaseEntity GetEntityInSquare(int x, int y)
+        public BaseEntity GetEntityInSquare(Point loc)
         {
-            return Entities.SingleOrDefault(entity => entity.X == x && entity.Y == y);
+            return Entities.SingleOrDefault(entity => entity.Location == loc);
         }
 
         public void UpdateTimers()

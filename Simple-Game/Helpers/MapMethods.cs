@@ -6,8 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using RogueSharp.Random;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
+using Point = RogueSharp.Point;
 
-namespace SimpleGame.Engine
+namespace SimpleGame.Helpers
 {
     public static class MapExtensions
     {
@@ -34,6 +36,26 @@ namespace SimpleGame.Engine
                     return map.GetCell(x, y);
                 }
             }
+        }
+
+        public static bool IsInFov(this IMap map, Point point)
+        {
+            return map.IsInFov(point.X, point.Y);
+        }
+
+        public static bool IsExplored(this IMap map, Point point)
+        {
+            return map.IsExplored(point.X, point.Y);
+        }
+
+        public static bool IsTransparent(this IMap map, Point point)
+        {
+            return map.IsTransparent(point.X, point.Y);
+        }
+
+        public static bool IsWalkable(this IMap map, Point point)
+        {
+            return map.IsWalkable(point.X, point.Y);
         }
 
         public static void DrawUi(this UserInterface userInterface, GameTime gameTime, StatBlock uiModel)
@@ -82,7 +104,7 @@ namespace SimpleGame.Engine
 
         public static void UpdatePlayerFieldOfView(this IMap map, BaseEntity player)
         {
-            map.ComputeFov(player.X, player.Y, 10, true);
+            map.ComputeFov(player.Location.X, player.Location.Y, player.LightRadius, true);
             foreach (Cell cell in map.GetAllCells())
             {
                 if (map.IsInFov(cell.X, cell.Y))

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using RogueSharp;
 using SimpleGame.Models;
+using SimpleGame.Models.Entities;
 
 namespace SimpleGameTests.EngineTests
 {
@@ -14,14 +15,14 @@ namespace SimpleGameTests.EngineTests
         public void Init()
         {
             Map = new BorderOnlyMapCreationStrategy<Map>(5, 5).CreateMap();
-            Entity = new BaseEntity();
+            Entity = new BaseEntity {Stats = new StatBlock()};
         }
 
         [SetUp]
         public void Setup()
         {
-            Entity.X = 3;
-            Entity.Y = 3;
+            Entity.Location.X = 3;
+            Entity.Location.Y = 3;
         }
 
         [TestCase(2, 2, ExpectedResult = false)]
@@ -34,7 +35,7 @@ namespace SimpleGameTests.EngineTests
             //Arrange
 
             //Act
-            var actual = Entity.Move(x, y, Map);
+            var actual = Entity.Move(new Point(x, y), Map);
 
             //Assert
             return actual;
