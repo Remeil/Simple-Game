@@ -15,7 +15,7 @@ namespace SimpleGameTests.EngineTests
         public void Init()
         {
             Map = new BorderOnlyMapCreationStrategy<Map>(5, 5).CreateMap();
-            Entity = new BaseEntity();
+            Entity = new BaseEntity {Stats = new StatBlock()};
         }
 
         [SetUp]
